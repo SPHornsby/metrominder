@@ -1,6 +1,6 @@
 var train = require("express").Router();
 var schedule = require("../data/schedule").data;
-var querystring = require('querystring');
+var querystring = require("querystring");
 train.get("/", function(req, res) {
   var trainNumber = req.query.train;
   var station = req.query.station;

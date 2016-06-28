@@ -6,7 +6,8 @@ var schedule = require("./data/schedule.js").data;
 
 
 app.get("/", function(req, res) {
-  res.send(schedule[0].stops);
+
+  res.send("Please use the assigned endpoints of the api");
 });
 app.use("/train", train);
 app.use("/route", route);
