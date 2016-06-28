@@ -1,0 +1,23 @@
+{
+  "name": "metrominder",
+  "version": "1.0.0",
+  "description": "An app for commuters who want to check if their trains are running on schedule.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SPHornsby/metrominder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SPHornsby/metrominder/issues"
+  },
+  "homepage": "https://github.com/SPHornsby/metrominder#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
