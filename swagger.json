@@ -1,0 +1,63 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.0",
+        "title": "MetroMinder"
+    },
+    "paths": {
+        "/train": {
+            "get": {
+                "description": "Gets `train` object.\nOptional query param of **station** returns that train's scheduled stop at that station.\n",
+                "parameters": [
+                    {
+                        "name": "train",
+                        "in": "query",
+                        "description": "ID Number of train.",
+                        "required": true,
+                        "type": "number",
+                        "format": "int"
+                    },
+                    {
+                        "name": "station",
+                        "in": "query",
+                        "description": "Name of a station on the route.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                    }
+                }
+            }
+        },
+        "/route": {
+            "get": {
+                "description": "Gets `route` object for each train of the route type.\nOptional query param of **station** returns that train's scheduled stop at that station.\n",
+                "parameters": [
+                    {
+                        "name": "route",
+                        "in": "query",
+                        "description": "Type of route.",
+                        "required": true,
+                        "type": "string",
+                        "format": "Inbound or Outbound"
+                    },
+                    {
+                        "name": "station",
+                        "in": "query",
+                        "description": "Name of a station on the route.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                    }
+                }
+            }
+        }
+    }
+}
