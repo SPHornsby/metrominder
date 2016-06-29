@@ -1,10 +1,3 @@
-// var buildWholeSchedule = function(wholeLine) {
-//   wholeLine.map(function(train) {
-//     return {train: train.train, name: train.stops[0].name, time: time, status: status};
-//   });
-// };
-
-
 var buildTrainResult = function(resultObject) {
   var parent = document.getElementsByClassName("results")[0];
 
@@ -43,9 +36,6 @@ function clear(element){
     element.removeChild(element.firstChild);
   }
 }
-//buildTrainResult({train: 682, variance: 10000});
-// var testArr = [{train: 682, variance: 100000},{train: 681, variance: 0},{train: 600, variance: 700000},{train: 601, variance: 5000}]
-// buildAll(testArr);
 var getRouteOnly = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/route?" + query);
@@ -58,7 +48,7 @@ var getRouteOnly = function getRouteOnly(query) {
       console.log("No response");
     }
   });
-}
+};
 var initialResults = function() {
   var xhr= new XMLHttpRequest();
   xhr.open("GET", "/route/all");
@@ -80,7 +70,7 @@ var initialResults = function() {
 //     console.log("Enter");
 //   }
 // });
-$('.type-search').on('click', function(e) {
+$(".type-search").on("click", function(e) {
   var route;
   var station = e.target.form[4].value;
   if (e.target.form[0].checked === true) {
@@ -92,10 +82,9 @@ $('.type-search').on('click', function(e) {
   if (station !== "None") {
     query = query+`&station=${station}`;
   }
-  console.log(query);
   getRouteOnly(query);
 });
-$('.train-search').on('click', function(e) {
+$(".train-search").on("click", function(e) {
 
   var train = e.target.form[3].value;
   var station = e.target.form[4].value;

@@ -10,18 +10,18 @@ route.get("/", function(req, res) {
   });
   var response;
   if (station !== undefined) {
-     results = trainObjects.map(function(item){
+    var results = trainObjects.map(function(item){
       var halfObject = item.stops.filter(function(stop) {
         if (stop.name === station) {
           var test={};
           return test;
         }
-      })
+      });
       return {train: item.train, name: halfObject[0].name, time: time.hasTime(halfObject[0].time), status: item.variance};
     });
-    var response = [results];
+    response = [results];
   } else {
-     response = trainObjects.map(function(item) {
+    response = trainObjects.map(function(item) {
       var results = [];
 
       for (var i = 0; i < item.stops.length; i++) {
