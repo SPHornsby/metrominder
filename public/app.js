@@ -89,7 +89,7 @@ $('.type-search').on('click', function(e) {
     route = "outbound";
   }
   var query = `route=${route}`;
-  if (station.length > 0) {
+  if (station !== "None") {
     query = query+`&station=${station}`;
   }
   console.log(query);
@@ -100,7 +100,7 @@ $('.train-search').on('click', function(e) {
   var train = e.target.form[3].value;
   var station = e.target.form[4].value;
   var query = `train=${train}`;
-  if (station.length > 0) {
+  if (station !== "None") {
     query = query+`&station=${station}`;
   }
 
