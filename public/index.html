@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title></title>
+    <title>MetroFinder</title>
     <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="default.css">
@@ -18,7 +18,17 @@
           <h1>MetroMinder</h1>
         </div>
         <div class="search-area">
-          <input type="button" name="search" value="">
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+
+                <input type="text" class="form-control" id="search-input" placeholder="Search">
+                <div class="input-group-addon search-button">
+                  <span class="glyphicon glyphicon-search"></span>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
         <div class="results">
 

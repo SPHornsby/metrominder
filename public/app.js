@@ -46,9 +46,9 @@ function clear(element){
 //buildTrainResult({train: 682, variance: 10000});
 // var testArr = [{train: 682, variance: 100000},{train: 681, variance: 0},{train: 600, variance: 700000},{train: 601, variance: 5000}]
 // buildAll(testArr);
-function getRouteOnly() {
+var getRouteOnly = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/route?route=outbound");
+  xhr.open("GET", "/route?" + query);
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
@@ -71,4 +71,15 @@ var initialResults = function() {
       console.log("No response");
     }
   });
+};
+document.getElementById('search-input').addEventListener('keypress', function(e) {
+  if (e.charCode === 13) {
+    e.preventDefault();
+    var query = "route=outbound";
+    getRouteOnly(query);
+    console.log("Enter");
+  }
+})
+window.onload = function(){
+  initialResults();
 };

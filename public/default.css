@@ -13,3 +13,9 @@ body {
 .results {
   background-color: orange;
 }
+.form-group {
+  padding: 10px;
+}
+.search-button:hover {
+  cursor: pointer;
+}
