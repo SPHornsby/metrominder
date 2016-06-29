@@ -103,7 +103,6 @@ $('.train-search').on('click', function(e) {
   if (station !== "None") {
     query = query+`&station=${station}`;
   }
-
   console.log(query);
 });
 window.onload = function(){

@@ -4,14 +4,26 @@ body {
 .app {
   color: white;
 }
-.top-bar {
+.top {
+  font-family: 'Rajdhani', Arial, sans-serif;
+  /*font-family: "Arial Black", Arial, "Helvetica Neue", Helvetica, sans-serif;*/
+  /*font-variant: small-caps;*/
   background-color: #00686e;
+  padding-top: 2px;
+  padding-bottom: 5px;
+}
+.top h1 {
+  font-size: 3.5em;
 }
 .search-area {
   background-color: #3fb4da;
 }
-.results {
+.results-header{
   background-color: orange;
+}
+.results {
+  color: black;
+  background-color: #f0f0f0;
 }
 .form-group {
   padding: 10px;
