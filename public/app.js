@@ -38,11 +38,13 @@ function clear(element){
 }
 var getRouteOnly = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/route?" + query);
+  xhr.open("GET", query);
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
+    console.log(xhr.responseText);
     if (xhr.responseText) {
+
       buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
@@ -78,7 +80,7 @@ $(".type-search").on("click", function(e) {
   } else {
     route = "outbound";
   }
-  var query = `route=${route}`;
+  var query = `/route?route=${route}`;
   if (station !== "None") {
     query = query+`&station=${station}`;
   }
@@ -88,11 +90,12 @@ $(".train-search").on("click", function(e) {
 
   var train = e.target.form[3].value;
   var station = e.target.form[4].value;
-  var query = `train=${train}`;
+  var query = `/train?train=${train}`;
   if (station !== "None") {
     query = query+`&station=${station}`;
   }
   console.log(query);
+  getRouteOnly(query);
 });
 window.onload = function(){
   initialResults();
