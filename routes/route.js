@@ -8,38 +8,41 @@ route.get("/", function(req, res) {
   var trainObjects = schedule.filter(function(item) {
     return item.route == route;
   });
-  //TODO add station check here and then filter for that station.
+  var response;
   if (station !== undefined) {
-    //console.log(trainObjects);
-    var newTrains = trainObjects.map(function(item){
-      item.stops.filter(function(stop) {
+     results = trainObjects.map(function(item){
+      var halfObject = item.stops.filter(function(stop) {
         if (stop.name === station) {
-          console.log("Match");
-          return stop;
+          var test={};
+          return test;
         }
-      });
+      })
+      return {train: item.train, name: halfObject[0].name, time: time.hasTime(halfObject[0].time), status: item.variance};
+    });
+    var response = [results];
+  } else {
+     response = trainObjects.map(function(item) {
+      var results = [];
+
+      for (var i = 0; i < item.stops.length; i++) {
+        var itemTime = item.stops[i].time;
+        var timeString = time.hasTime(itemTime);
+        var status;
+        if (item.variance > 0) {
+          status = "Late";
+        } else {
+          status = "On-Time";
+        }
+        var object = {train: item.train, name: item.stops[i].name, time: timeString, status: status};
+        results.push(object);
+      }
+      return results;
+
     });
   }
-  var response = trainObjects.map(function(item) {
-    var results = [];
-    console.log(" stop length {$item.stops.length}");
-    for (var i = 0; i < item.stops.length; i++) {
-      var itemTime = item.stops[i].time;
-      var timeString = time.hasTime(itemTime);
-      var status;
-      if (item.variance > 0) {
-        status = "Late";
-      } else {
-        status = "On-Time";
-      }
-      var object = {train: item.train, name: item.stops[i].name, time: timeString, status: status};
-      results.push(object);
-    }
-    return results;
 
-  });
   //results or response?
-  console.log(response.length);
+
   res.send(response);
 });
 route.get("/all", function(req, res) {

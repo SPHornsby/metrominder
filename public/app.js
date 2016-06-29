@@ -72,14 +72,40 @@ var initialResults = function() {
     }
   });
 };
-document.getElementById('search-input').addEventListener('keypress', function(e) {
-  if (e.charCode === 13) {
-    e.preventDefault();
-    var query = "route=outbound";
-    getRouteOnly(query);
-    console.log("Enter");
+// document.getElementById('search-input').addEventListener('keypress', function(e) {
+//   if (e.charCode === 13) {
+//     e.preventDefault();
+//     var query = "route=outbound";
+//     getRouteOnly(query);
+//     console.log("Enter");
+//   }
+// });
+$('.type-search').on('click', function(e) {
+  var route;
+  var station = e.target.form[4].value;
+  if (e.target.form[0].checked === true) {
+    route = "inbound";
+  } else {
+    route = "outbound";
   }
-})
+  var query = `route=${route}`;
+  if (station.length > 0) {
+    query = query+`&station=${station}`;
+  }
+  console.log(query);
+  getRouteOnly(query);
+});
+$('.train-search').on('click', function(e) {
+
+  var train = e.target.form[3].value;
+  var station = e.target.form[4].value;
+  var query = `train=${train}`;
+  if (station.length > 0) {
+    query = query+`&station=${station}`;
+  }
+
+  console.log(query);
+});
 window.onload = function(){
   initialResults();
 };

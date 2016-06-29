@@ -19,3 +19,23 @@ body {
 .search-button:hover {
   cursor: pointer;
 }
+/*.radio {
+  padding-left: 20px;
+}*/
+.form-control {
+  width: 100%;
+  margin-top: 5px;
+}
+button {
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+form {
+  padding: 15px;
+}
+.radio label {
+  margin-bottom: 7px;
+}
+.type-search {
+  margin-left: 10px;
+}

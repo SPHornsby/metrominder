@@ -20,7 +20,28 @@ module.exports = {
         {name: "Oceanside", time: "no-stop"}
       ]
     },
-    {"train": 600, "route": "outbound", "variance": 300000,
+    {"train": 600, "route": "inbound", "variance": 300000,
+      "stops":
+      [
+        {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
+        {name: "Commerce", time: "no_stop"},
+        {name: "Norwalk/SFS", time: {hours: 8, minutes: 20, seconds: 0}},
+        {name: "Buena Park", time: {hours: 8, minutes: 27, seconds: 0}},
+        {name: "Fullerton", time: {hours: 8, minutes: 33, seconds: 0}},
+        {name: "Anaheim", time: {hours: 8, minutes: 40, seconds: 0}},
+        {name: "Orange", time: {hours: 8, minutes: 45, seconds: 0}},
+        {name: "Santa Ana", time: {hours: 8, minutes: 50, seconds: 0}},
+        {name: "Tustin", time: {hours: 8, minutes: 56, seconds: 0}},
+        {name: "Irvine", time: {hours: 9, minutes: 4, seconds: 0}},
+        {name: "Laguna Nigel", time: {hours: 9, minutes: 14, seconds: 0}},
+        {name: "SJC", time: {hours: 9, minutes: 20, seconds: 0}},
+        {name: "San Clemente", time: {hours: 9, minutes: 30, seconds: 0}},
+        // {name: "San Clemente Pier", time: "no_stop"},
+        {name: "Oceanside", time: {hours: 10, minutes: 1, seconds: 0}}
+      ]
+
+    },
+    {"train": 900, "route": "outbound", "variance": 300000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
