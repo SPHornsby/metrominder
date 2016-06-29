@@ -1,5 +1,13 @@
+// var buildWholeSchedule = function(wholeLine) {
+//   wholeLine.map(function(train) {
+//     return {train: train.train, name: train.stops[0].name, time: time, status: status};
+//   });
+// };
+
+
 var buildTrainResult = function(resultObject) {
   var parent = document.getElementsByClassName("results")[0];
+
   var block = document.createElement("div");
   block.setAttribute("class", "row");
   block.style["border-bottom"] = "5px";
@@ -22,6 +30,7 @@ var buildTrainResult = function(resultObject) {
   parent.appendChild(block);
 };
 var buildAll = function(fullObject) {
+  clear(document.getElementsByClassName("results")[0]);
   fullObject.forEach(function(item) {
     item.forEach(function(nestedItem) {
       buildTrainResult(nestedItem);
@@ -29,6 +38,11 @@ var buildAll = function(fullObject) {
 
   });
 };
+function clear(element){
+  while (element.firstChild){
+    element.removeChild(element.firstChild);
+  }
+}
 //buildTrainResult({train: 682, variance: 10000});
 // var testArr = [{train: 682, variance: 100000},{train: 681, variance: 0},{train: 600, variance: 700000},{train: 601, variance: 5000}]
 // buildAll(testArr);
@@ -45,3 +59,16 @@ function getRouteOnly() {
     }
   });
 }
+var initialResults = function() {
+  var xhr= new XMLHttpRequest();
+  xhr.open("GET", "/route/all");
+  xhr.send();
+  xhr.addEventListener("load", function() {
+    if (xhr.responseText) {
+      var response = [JSON.parse(xhr.responseText)];
+      buildAll(response);
+    } else {
+      console.log("No response");
+    }
+  });
+};
