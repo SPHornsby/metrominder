@@ -1,5 +1,6 @@
 var route = require("express").Router();
 var schedule = require("../data/schedule").data;
+var time = require("../time.js");
 
 route.get("/", function(req, res) {
   var route = req.query.route;
@@ -8,34 +9,57 @@ route.get("/", function(req, res) {
     return item.route == route;
   });
   var response = trainObjects.map(function(item) {
+    // if (item.variance > 0) {
+    //   console.log(`Train is running ${item.variance} milliseconds late`);
+    // }
+    //console.log(station);
     if (station != undefined) {
-      // var oldTime = item.stops[station];
-      // var newTime = item.stops[station] + item.variance;
-      // var today = new Date;
-      // var datestring = today.toDateString();
-      // var madeString = datestring + " 2:00:00";
-      // var parsedDate = Date.parse(madeString);
-      // var updated = new Date(parsedDate + 300000);
-      // console.log(parsedDate);
-      // console.log(parsedDate + 5000);
-      // console.log(updated.toTimeString());
-      var newTime = adjustTime(item.stops[station], item.variance);
-      return {train: item.train, time: item.stops[station], variance: item.variance, newTime: newTime};
+      console.log(item.stops[station]);
+      var time = `${item.stops[station].hours}:${item.stops[station].minutes}`;
+      console.log(time);
+      return {train: item.train, time: item.stops[station], variance: item.variance};
     } else {
-      return {train: item.train, stops:item.stops, variance: item.variance};
+      var results = [];
+      console.log(" stop length {$item.stops.length}");
+      for (var i = 0; i < item.stops.length; i++) {
+        var time;
+        if (typeof item.stops[i].time === "object") {
+          var stop = item.stops[i];
+          var seconds = stop.time.minutes.toString(10);
+          console.log(`seconds length ${seconds.length}`);
+          if (seconds.length===1) {
+
+            seconds = "0" + seconds;
+          }
+          time = `${stop.time.hours}:${seconds}`;
+        } else {
+          time = "No Stop";
+        }
+
+
+        var status;
+        if (item.variance > 0) {
+          status = "Late";
+        } else {
+          status = "On-Time";
+        }
+        var object = {train: item.train, name: item.stops[i].name, time: time, status: status};
+        results.push(object);
+      }
+      return results;
     }
 
   });
   res.send(response);
 });
 
-var adjustTime = function(time, variance) {
-  var today = new Date;
-  var datestring = today.toDateString();
-  var madeString = datestring + " " + time;
-  var parsedDate = Date.parse(madeString);
-  var updated = new Date(parsedDate + (variance*60000));
-  return updated.toTimeString().slice(0,5);
-};
+// var adjustTime = function(time, variance) {
+//   var today = new Date;
+//   var datestring = today.toDateString();
+//   var madeString = datestring + " " + time;
+//   var parsedDate = Date.parse(madeString);
+//   var updated = new Date(parsedDate + (variance*60000));
+//   return updated.toTimeString().slice(0,5);
+// };
 
 module.exports = route;

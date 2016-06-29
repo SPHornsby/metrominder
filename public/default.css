@@ -1,0 +1,15 @@
+body {
+
+}
+.app {
+  color: white;
+}
+.top-bar {
+  background-color: #00686e;
+}
+.search-area {
+  background-color: #3fb4da;
+}
+.results {
+  background-color: orange;
+}
