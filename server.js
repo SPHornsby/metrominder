@@ -3,7 +3,6 @@ var app = express();
 var train = require("./routes/train.js");
 var route = require("./routes/route.js");
 var search = require("./routes/search.js");
-var schedule = require("./data/schedule.js").data;
 
 app.use(express.static("./public"));
 

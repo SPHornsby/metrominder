@@ -29,7 +29,7 @@ var buildTrainResult = function(resultObject) {
 var buildAll = function(fullObject) {
   clear(document.getElementsByClassName("results")[0]);
   fullObject.forEach(function(item) {
-      buildTrainResult(item);
+    buildTrainResult(item);
   });
 };
 function clear(element){
@@ -43,10 +43,10 @@ var display = function getRouteOnly(query) {
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
-    console.log(xhr.responseText);
+
     if (xhr.responseText) {
 
-    buildAll(JSON.parse(xhr.responseText));
+      buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
     }
@@ -72,7 +72,6 @@ var getTrains = function(query) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      console.log(xhr.responseText);
       trainsSelector(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
@@ -81,17 +80,17 @@ var getTrains = function(query) {
 };
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
-  var selector = $('#trains');
-  console.log(trainOptions);
+  var selector = $("#trains");
+
   trainOptions.forEach(function(train) {
     options.push(`<option>${train}</option>`);
-  })
+  });
   selector.empty().append(options.join(""));
 
 };
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
-  console.log(`first: ${form[0].value} second: ${form[1].value} third: ${form[2].value}`);
+
   var route = form[0].value;
   var train = form[1].value;
   var station = form[2].value;
@@ -114,25 +113,24 @@ $(".train-search").on("click", function(e) {
     }
     query = query + `station=${station}`;
   }
-  console.log(query);
   display(query);
   // $(".search-bar").toggleClass("hidden");
   // $(".search-area").toggleClass("hidden");
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
 });
-$('#route').on("change", function(e) {
+$("#route").on("change", function(e) {
   var route = e.target.value;
   var query = `/train?route=${route}`;
   getTrains(query);
 });
-$('#show-search').on("click", function() {
+$("#show-search").on("click", function() {
   //$(".search-bar").toggleClass("hidden");
   //$(".search-area").toggleClass("hidden");
   $(".search-area").slideDown(200);
   $(".search-bar").slideUp(200);
 });
-$('.search-close').on("click", function() {
+$(".search-close").on("click", function() {
   // $(".search-bar").toggleClass("hidden");
   // $(".search-area").toggleClass("hidden");
   $(".search-area").slideUp(200);
