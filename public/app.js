@@ -148,6 +148,7 @@ $(".search-close").on("click", function() {
   $(".search-bar").slideDown(200);
 });
 $(function(){
+  getTrains("/train?route=all");
   $(".search-area").hide();
   initialResults();
 });
