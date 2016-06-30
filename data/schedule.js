@@ -1,6 +1,6 @@
 module.exports = {
   data: [
-    {"train": 682, "route": "outbound", "variance": 0,
+    {"train": 682, "route": "Southbound", "variance": 0,
       "stops":
       [
         {name:"LA", time: {hours: 6, minutes: 50, seconds: 0}},
@@ -20,7 +20,7 @@ module.exports = {
         {name: "Oceanside", time: "no-stop"}
       ]
     },
-    {"train": 600, "route": "inbound", "variance": 300000,
+    {"train": 600, "route": "Northbound", "variance": 300000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
@@ -41,7 +41,7 @@ module.exports = {
       ]
 
     },
-    {"train": 900, "route": "outbound", "variance": 300000,
+    {"train": 900, "route": "Southbound", "variance": 300000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},

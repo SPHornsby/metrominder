@@ -5,26 +5,37 @@ var time = require("../time.js");
 search.get('/', function(req, res) {
   var route = req.query.route,
       station = req.query.station,
-      train = req.query.train,
+      trainNumber = req.query.train,
       trains = schedule,
       response;
-      console.log(`Route: ${route} Station: ${station} Train: ${train}`);
+
+      trains = trains.map((train) => {
+          return train.stops.map((stop) => {
+            return {train: train.train, route: train.route, status: train.variance, station: stop.name, time: time.hasTime(stop.time)};
+        })
+      }).reduce((a,b) => a.concat(b));
 
       if (route !== undefined) {
         console.log("route filter");
-        trains = trains.filter((item) => item.route === route);
-        trains = trains.map((train) => {
-            return train.stops.map((stop) => {
-              return {train: train.train, route: train.route, status: train.variance, station: stop.name, time: time.hasTime(stop.time)};
-          })
-        }).reduce((a,b) => a.concat(b));
+        trains = trains.filter(train => train.route === route );
+
+
+        // trains = trains.filter((item) => item.route === route);
+        // trains = trains.map((train) => {
+        //     return train.stops.map((stop) => {
+        //       return {train: train.train, route: train.route, status: train.variance, station: stop.name, time: time.hasTime(stop.time)};
+        //   })
+        // }).reduce((a,b) => a.concat(b));
 
       }
-      if (train !== undefined) {
+      if (trainNumber !== undefined) {
         console.log("train filter");
-        trains = trains.filter((item) => item.train.toString(10) === train)[0].stops.map((stop) => {
-          return {train: trains[0].train, route: trains[0].route, status:trains[0].variance, station: stop.name, time: time.hasTime(stop.time)};
-        });
+
+        trains = trains.filter(train => train.train.toString(10) === trainNumber);
+
+        // trains = trains.filter((item) => item.train.toString(10) === train)[0].stops.map((stop) => {
+        //   return {train: trains[0].train, route: trains[0].route, status:trains[0].variance, station: stop.name, time: time.hasTime(stop.time)};
+        // });
         // trains = trains[0].stops.map((stop) => {
         //   return {train: trains[0].train, route: trains[0].route, status:trains[0].variance, station: stop.name, time: time.hasTime(stop.time)};
         // });
@@ -32,11 +43,13 @@ search.get('/', function(req, res) {
       }
       if (station !== undefined) {
         console.log("station filter");
-        trains = trains.map((item) => {
-          var stops = item.stops;
-          var stop = stops.filter((stop) => stop.name === station);
-          return {train: item.train, route: item.route, station: stop[0].name, time: time.hasTime(stop[0].time), status: item.variance};
-        });
+
+        trains = trains.filter(train => train.station === station);
+        // trains = trains.map((item) => {
+        //   var stops = item.stops;
+        //   var stop = stops.filter((stop) => stop.name === station);
+        //   return {train: item.train, route: item.route, station: stop[0].name, time: time.hasTime(stop[0].time), status: item.variance};
+        // });
       }
 
 

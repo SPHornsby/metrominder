@@ -45,7 +45,7 @@ var getRouteOnly = function getRouteOnly(query) {
     console.log(xhr.responseText);
     if (xhr.responseText) {
 
-      buildAll(JSON.parse(xhr.responseText));
+    //  buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
     }
@@ -72,27 +72,44 @@ var initialResults = function() {
 //     console.log("Enter");
 //   }
 // });
-$(".type-search").on("click", function(e) {
-  var route;
-  var station = e.target.form[4].value;
-  if (e.target.form[0].checked === true) {
-    route = "inbound";
-  } else {
-    route = "outbound";
-  }
-  var query = `/route?route=${route}`;
-  if (station !== "None") {
-    query = query+`&station=${station}`;
-  }
-  getRouteOnly(query);
-});
+// $(".type-search").on("click", function(e) {
+//   var route;
+//   var station = e.target.form[4].value;
+//   if (e.target.form[0].checked === true) {
+//     route = "inbound";
+//   } else {
+//     route = "outbound";
+//   }
+//   var query = `/route?route=${route}`;
+//   if (station !== "None") {
+//     query = query+`&station=${station}`;
+//   }
+//   getRouteOnly(query);
+// });
 $(".train-search").on("click", function(e) {
-
-  var train = e.target.form[3].value;
-  var station = e.target.form[4].value;
-  var query = `/train?train=${train}`;
+  var form = e.target.form;
+  console.log(`first: ${form[0].value} second: ${form[1].value} third: ${form[2].value}`);
+  var route = form[0].value;
+  var train = form[1].value;
+  var station = form[2].value;
+  var query = "/search?";
+  if (route !== "None") {
+    if (query.slice(-1) !== "?") {
+      query = query +"&";
+    }
+    query = query + `route=${route}`;
+  }
+  if (train !== "None") {
+    if (query.slice(-1) !== "?") {
+      query = query +"&";
+    }
+    query = query + `train=${train}`;
+  }
   if (station !== "None") {
-    query = query+`&station=${station}`;
+    if (query.slice(-1) !== "?") {
+      query = query +"&";
+    }
+    query = query + `station=${station}`;
   }
   console.log(query);
   getRouteOnly(query);
