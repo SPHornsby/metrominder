@@ -71,8 +71,15 @@ var getTrains = function(query) {
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
+
     if (xhr.responseText) {
-      trainsSelector(JSON.parse(xhr.responseText));
+      var parsed = JSON.parse(xhr.responseText);
+      if (parsed.length > 0) {
+        trainsSelector(JSON.parse(xhr.responseText));
+      } else {
+        getTrains("/train?route=all");
+      }
+
     } else {
       console.log("No response");
     }
@@ -81,13 +88,15 @@ var getTrains = function(query) {
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#trains");
-
+  // if (trainOptions.length === 0) {
+  //   trainOptions = getTrains("/train?route=all");
+  // }
   trainOptions.forEach(function(train) {
     options.push(`<option>${train}</option>`);
   });
   selector.empty().append(options.join(""));
-
 };
+
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
 
