@@ -1,40 +1,12 @@
 var train = require("express").Router();
 var schedule = require("../data/schedule").data;
 var time = require("../time.js");
+
 train.get("/", function(req, res) {
   console.log(req.query);
-  var trainNumber = req.query.train;
-  var station = req.query.station;
-  var trainObject = schedule.filter(function(item) {
-    return item.train == trainNumber;
-  });
-  console.log(trainObject[0].stops);
-  var response = trainObject;
-  if (station !== undefined) {
-    //response = findTrainObject(schedule, station);
-    console.log(response);
-    response = trainObject[0].stops.filter((stop) => stop.name === station);
-  } else {
-    response = trainObject.map(function(item) {
-      var results = [];
-
-      for (var i = 0; i < item.stops.length; i++) {
-        var itemTime = item.stops[i].time;
-        var timeString = time.hasTime(itemTime);
-        var status;
-        if (item.variance > 0) {
-          status = "Late";
-        } else {
-          status = "On-Time";
-        }
-        var object = {train: item.train, name: item.stops[i].name, time: timeString, status: status};
-        results.push(object);
-      }
-      return results;
-
-    });
-  }
-  res.send(response);
+  var route = req.query.route;
+  var trains = schedule.filter(train => train.route === route).map(item => item.train);
+  res.send(trains);
 });
 
 // var findTrainObject = function(trains, station) {

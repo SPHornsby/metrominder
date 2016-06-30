@@ -11,7 +11,7 @@ search.get('/', function(req, res) {
 
       trains = trains.map((train) => {
           return train.stops.map((stop) => {
-            return {train: train.train, route: train.route, status: train.variance, station: stop.name, time: time.hasTime(stop.time)};
+            return {train: train.train, route: train.route, status: time.convert(train.variance).minutes, station: stop.name, time: time.hasTime(stop.time)};
         })
       }).reduce((a,b) => a.concat(b));
 

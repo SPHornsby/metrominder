@@ -15,8 +15,22 @@ body {
 .top h1 {
   font-size: 3.5em;
 }
-.search-area {
+.search-area, .search-bar {
   background-color: #3fb4da;
+  /*font-family: 'Rajdhani', Arial, sans-serif;*/
+}
+.search-bar {
+  padding-bottom: 17px;
+}
+#show-search {
+  
+
+  font-size: 16px;
+}
+.search-close {
+  float: right;
+  margin-top: 2px;
+  margin-right: -65px;
 }
 .results-header{
   background-color: #ff6d10;
@@ -31,6 +45,7 @@ body {
 .search-button:hover {
   cursor: pointer;
 }
+
 /*.radio {
   padding-left: 20px;
 }*/

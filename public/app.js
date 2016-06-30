@@ -9,13 +9,17 @@ var buildTrainResult = function(resultObject) {
   train.textContent = resultObject.train;
   var station = document.createElement("div");
   station.setAttribute("class", "col-xs-4");
-  station.textContent = resultObject.name;
+  station.textContent = resultObject.station;
   var time = document.createElement("div");
   time.setAttribute("class", "col-xs-3");
   time.textContent = resultObject.time;
   var status = document.createElement("div");
   status.setAttribute("class", "col-xs-3");
   status.textContent = resultObject.status;
+  if (resultObject.status > 0) {
+    status.style["color"] = "red";
+    status.textContent = "+" + resultObject.status;
+  }
   block.appendChild(train);
   block.appendChild(station);
   block.appendChild(time);
@@ -25,10 +29,7 @@ var buildTrainResult = function(resultObject) {
 var buildAll = function(fullObject) {
   clear(document.getElementsByClassName("results")[0]);
   fullObject.forEach(function(item) {
-    item.forEach(function(nestedItem) {
-      buildTrainResult(nestedItem);
-    });
-
+      buildTrainResult(item);
   });
 };
 function clear(element){
@@ -36,7 +37,7 @@ function clear(element){
     element.removeChild(element.firstChild);
   }
 }
-var getRouteOnly = function getRouteOnly(query) {
+var display = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
   xhr.setRequestHeader("Content-type", "text/html");
@@ -45,7 +46,7 @@ var getRouteOnly = function getRouteOnly(query) {
     console.log(xhr.responseText);
     if (xhr.responseText) {
 
-    //  buildAll(JSON.parse(xhr.responseText));
+    buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
     }
@@ -53,39 +54,41 @@ var getRouteOnly = function getRouteOnly(query) {
 };
 var initialResults = function() {
   var xhr= new XMLHttpRequest();
-  xhr.open("GET", "/route/all");
+  xhr.open("GET", "/search");
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      var response = [JSON.parse(xhr.responseText)];
+      var response = JSON.parse(xhr.responseText);
       buildAll(response);
     } else {
       console.log("No response");
     }
   });
 };
-// document.getElementById('search-input').addEventListener('keypress', function(e) {
-//   if (e.charCode === 13) {
-//     e.preventDefault();
-//     var query = "route=outbound";
-//     getRouteOnly(query);
-//     console.log("Enter");
-//   }
-// });
-// $(".type-search").on("click", function(e) {
-//   var route;
-//   var station = e.target.form[4].value;
-//   if (e.target.form[0].checked === true) {
-//     route = "inbound";
-//   } else {
-//     route = "outbound";
-//   }
-//   var query = `/route?route=${route}`;
-//   if (station !== "None") {
-//     query = query+`&station=${station}`;
-//   }
-//   getRouteOnly(query);
-// });
+var getTrains = function(query) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", query);
+  xhr.setRequestHeader("Content-type", "text/html");
+  xhr.send();
+  xhr.addEventListener("load", function() {
+    if (xhr.responseText) {
+      console.log(xhr.responseText);
+      trainsSelector(JSON.parse(xhr.responseText));
+    } else {
+      console.log("No response");
+    }
+  });
+};
+var trainsSelector = function(trainOptions) {
+  var options = ["<option>None</option>"];
+  var selector = $('#trains');
+  console.log(trainOptions);
+  trainOptions.forEach(function(train) {
+    options.push(`<option>${train}</option>`);
+  })
+  selector.empty().append(options.join(""));
+
+};
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
   console.log(`first: ${form[0].value} second: ${form[1].value} third: ${form[2].value}`);
@@ -112,8 +115,30 @@ $(".train-search").on("click", function(e) {
     query = query + `station=${station}`;
   }
   console.log(query);
-  getRouteOnly(query);
+  display(query);
+  // $(".search-bar").toggleClass("hidden");
+  // $(".search-area").toggleClass("hidden");
+  $(".search-area").slideUp(200);
+  $(".search-bar").slideDown(200);
 });
-window.onload = function(){
+$('#route').on("change", function(e) {
+  var route = e.target.value;
+  var query = `/train?route=${route}`;
+  getTrains(query);
+});
+$('#show-search').on("click", function() {
+  //$(".search-bar").toggleClass("hidden");
+  //$(".search-area").toggleClass("hidden");
+  $(".search-area").slideDown(200);
+  $(".search-bar").slideUp(200);
+});
+$('.search-close').on("click", function() {
+  // $(".search-bar").toggleClass("hidden");
+  // $(".search-area").toggleClass("hidden");
+  $(".search-area").slideUp(200);
+  $(".search-bar").slideDown(200);
+});
+$(function(){
+  $(".search-area").hide();
   initialResults();
-};
+});

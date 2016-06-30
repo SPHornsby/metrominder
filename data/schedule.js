@@ -20,7 +20,7 @@ module.exports = {
         {name: "Oceanside", time: "no-stop"}
       ]
     },
-    {"train": 600, "route": "Northbound", "variance": 300000,
+    {"train": 600, "route": "Northbound", "variance": 60000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
