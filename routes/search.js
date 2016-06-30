@@ -7,10 +7,10 @@ search.get("/", function(req, res) {
     station = req.query.station,
     trainNumber = req.query.train,
     trains = schedule;
-
+  
   trains = trains.map((train) => {
     return train.stops.map((stop) => {
-      return {train: train.train, route: train.route, status: time.convert(train.variance).minutes, station: stop.name, time: time.hasTime(stop.time)};
+      return {train: train.train, route: train.route, status: time.convert(train.variance).minutes, station: stop.name, time: time.hasTime(stop.time), actualTime:time.hasTime(time.add(stop.time, train.variance))};
     });
   }).reduce((a,b) => a.concat(b));
   if (route !== undefined) {

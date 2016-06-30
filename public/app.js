@@ -3,26 +3,30 @@ var buildTrainResult = function(resultObject) {
 
   var block = document.createElement("div");
   block.setAttribute("class", "row");
-  block.style["border-bottom"] = "5px";
   var train = document.createElement("div");
   train.setAttribute("class", "col-xs-2");
   train.textContent = resultObject.train;
   var station = document.createElement("div");
-  station.setAttribute("class", "col-xs-4");
+  station.setAttribute("class", "col-xs-3");
   station.textContent = resultObject.station;
   var time = document.createElement("div");
   time.setAttribute("class", "col-xs-3");
   time.textContent = resultObject.time;
+  var actual = document.createElement("div");
+  actual.setAttribute("class", "col-xs-2");
+  actual.textContent = resultObject.actualTime;
   var status = document.createElement("div");
-  status.setAttribute("class", "col-xs-3");
+  status.setAttribute("class", "col-xs-2");
   status.textContent = resultObject.status;
   if (resultObject.status > 0) {
+    actual.style["color"] = "red";
     status.style["color"] = "red";
     status.textContent = "+" + resultObject.status;
   }
   block.appendChild(train);
   block.appendChild(station);
   block.appendChild(time);
+  block.appendChild(actual);
   block.appendChild(status);
   parent.appendChild(block);
 };
@@ -71,7 +75,6 @@ var getTrains = function(query) {
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
-
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
       if (parsed.length > 0) {
@@ -79,7 +82,6 @@ var getTrains = function(query) {
       } else {
         getTrains("/train?route=all");
       }
-
     } else {
       console.log("No response");
     }

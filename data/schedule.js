@@ -4,7 +4,7 @@ module.exports = {
       "stops":
       [
         {name:"LA", time: {hours: 6, minutes: 50, seconds: 0}},
-        {name: "Commerce", time: "no_stop"},
+
         {name: "Norwalk/SFS", time: {hours: 7, minutes: 12, seconds: 0}},
         {name: "Buena Park", time: {hours: 7, minutes: 19, seconds: 0}},
         {name: "Fullerton", time: {hours: 7, minutes: 25, seconds: 0}},
@@ -13,18 +13,13 @@ module.exports = {
         {name: "Santa Ana", time: {hours: 7, minutes: 44, seconds: 0}},
         {name: "Tustin", time: {hours: 7, minutes: 51, seconds: 0}},
         {name: "Irvine", time: {hours: 8, minutes: 0, seconds: 0}},
-        {name: "Laguna Nigel", time: {hours: 8, minutes: 15, seconds: 0}},
-        {name: "SJC", time: "no_stop"},
-        {name: "San Clemente", time: "no_stop"},
-        // {name: "San Clemente Pier", time: "no_stop"},
-        {name: "Oceanside", time: "no-stop"}
+        {name: "Laguna Nigel", time: {hours: 8, minutes: 15, seconds: 0}}
       ]
     },
     {"train": 600, "route": "Northbound", "variance": 60000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
-        {name: "Commerce", time: "no_stop"},
         {name: "Norwalk/SFS", time: {hours: 8, minutes: 20, seconds: 0}},
         {name: "Buena Park", time: {hours: 8, minutes: 27, seconds: 0}},
         {name: "Fullerton", time: {hours: 8, minutes: 33, seconds: 0}},
@@ -36,7 +31,6 @@ module.exports = {
         {name: "Laguna Nigel", time: {hours: 9, minutes: 14, seconds: 0}},
         {name: "SJC", time: {hours: 9, minutes: 20, seconds: 0}},
         {name: "San Clemente", time: {hours: 9, minutes: 30, seconds: 0}},
-        // {name: "San Clemente Pier", time: "no_stop"},
         {name: "Oceanside", time: {hours: 10, minutes: 1, seconds: 0}}
       ]
 
@@ -45,7 +39,6 @@ module.exports = {
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
-        {name: "Commerce", time: "no_stop"},
         {name: "Norwalk/SFS", time: {hours: 8, minutes: 20, seconds: 0}},
         {name: "Buena Park", time: {hours: 8, minutes: 27, seconds: 0}},
         {name: "Fullerton", time: {hours: 8, minutes: 33, seconds: 0}},
@@ -57,7 +50,7 @@ module.exports = {
         {name: "Laguna Nigel", time: {hours: 9, minutes: 14, seconds: 0}},
         {name: "SJC", time: {hours: 9, minutes: 20, seconds: 0}},
         {name: "San Clemente", time: {hours: 9, minutes: 30, seconds: 0}},
-        // {name: "San Clemente Pier", time: "no_stop"},
+
         {name: "Oceanside", time: {hours: 10, minutes: 1, seconds: 0}}
       ]
 

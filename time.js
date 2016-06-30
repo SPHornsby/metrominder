@@ -24,6 +24,7 @@ function time() {
     var newTime = time+adder;
     var newTimeObject = convert(newTime);
     console.log(newTimeObject);
+    return newTimeObject;
   };
   var hasTime = function(item) {
 
