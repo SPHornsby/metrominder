@@ -13,14 +13,21 @@ search.get('/', function(req, res) {
       if (route !== undefined) {
         console.log("route filter");
         trains = trains.filter((item) => item.route === route);
+        trains = trains.map((train) => {
+            return train.stops.map((stop) => {
+              return {train: train.train, route: train.route, status: train.variance, station: stop.name, time: time.hasTime(stop.time)};
+          })
+        }).reduce((a,b) => a.concat(b));
 
       }
       if (train !== undefined) {
         console.log("train filter");
-        trains = trains.filter((item) => item.train.toString(10) === train);
-        trains = trains[0].stops.map((stop) => {
+        trains = trains.filter((item) => item.train.toString(10) === train)[0].stops.map((stop) => {
           return {train: trains[0].train, route: trains[0].route, status:trains[0].variance, station: stop.name, time: time.hasTime(stop.time)};
         });
+        // trains = trains[0].stops.map((stop) => {
+        //   return {train: trains[0].train, route: trains[0].route, status:trains[0].variance, station: stop.name, time: time.hasTime(stop.time)};
+        // });
         //console.log(teststops);
       }
       if (station !== undefined) {
