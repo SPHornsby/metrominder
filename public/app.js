@@ -1,11 +1,11 @@
 var buildTrainResult = function(resultObject) {
-  var jBlock = $("<div>").addClass("row");
+  var jBlock = $("<div>").addClass("row station-row").attr("data-station", resultObject.station);
 
-  var jTrain = $("<div>").addClass("col-xs-2").text(resultObject.train);
-  var jStation = $("<div>").addClass("col-xs-3").text(resultObject.station);
-  var jTime = $("<div>").addClass("col-xs-3").text(resultObject.time);
-  var jActual = $("<div>").addClass("col-xs-2").text(resultObject.actualTime);
-  var jStatus = $("<div>").addClass("col-xs-2").text(resultObject.status);
+  var jTrain = $("<div>").addClass("col-xs-2 station-col").text(resultObject.train);
+  var jStation = $("<div>").addClass("col-xs-3 station-col").text(resultObject.station);
+  var jTime = $("<div>").addClass("col-xs-3 station-col").text(resultObject.time);
+  var jActual = $("<div>").addClass("col-xs-2 station-col").text(resultObject.actualTime);
+  var jStatus = $("<div>").addClass("col-xs-2 station-col").text(resultObject.status);
   if (resultObject.status > 0 ) {
     jStatus.addClass("late");
   }
@@ -18,6 +18,41 @@ var buildAll = function(fullObject) {
     buildTrainResult(item);
   });
 };
+var createDirectionRow = function(row) {
+  $(".direction-row").remove();
+  var station = $(row).attr("data-station");
+  var directionRow = $("<div>").addClass("row direction-row");
+
+  var directionContents = $("<div>").addClass("col-xs-12").text(station + " to: ");
+  var directionInput = $("<input>");
+  var directionSelect = $("<select>");
+  var directionOption = $("<option>").text("Fake Location")
+  var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Get").attr("data-station", station);
+  $(directionSelect).append(directionOption);
+  $(directionContents).append(directionSelect, directionButton);
+  $(directionRow).append(directionContents);
+  $(row).append(directionRow);
+};
+var reportResults = function(resultObject) {
+  var row = $(".direction-row");
+  $(row).empty();
+
+  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2").text(`It will take you ${resultObject.duration} minutes to get from that location to the station.`);
+  $(row).append(results);
+};
+var getResults = function() {
+  var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/maps?" + query)
+  xhr.send();
+  xhr.addEventListener("load", function() {
+    if (xhr.responseText) {
+      reportResults(JSON.parse(xhr.responseText));
+    } else {
+      console.log("No results");
+    }
+  });
+}
 var display = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
@@ -123,6 +158,15 @@ $(".search-close").on("click", function() {
   // $(".search-area").toggleClass("hidden");
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
+});
+$(".results").on("click", ".station-col", function(e) {
+  var row = e.target.parentNode;
+
+  createDirectionRow(row);
+});
+$(".results").on("click", ".direction-button", function(e) {
+
+  getResults();
 });
 $(function(){
   getTrains("/train?route=all");
