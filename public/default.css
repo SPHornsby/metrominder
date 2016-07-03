@@ -64,3 +64,6 @@ form {
 .type-search {
   margin-left: 10px;
 }
+.late {
+  color: red;
+}

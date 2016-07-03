@@ -1,46 +1,23 @@
 var buildTrainResult = function(resultObject) {
-  var parent = document.getElementsByClassName("results")[0];
+  var jBlock = $("<div>").addClass("row");
 
-  var block = document.createElement("div");
-  block.setAttribute("class", "row");
-  var train = document.createElement("div");
-  train.setAttribute("class", "col-xs-2");
-  train.textContent = resultObject.train;
-  var station = document.createElement("div");
-  station.setAttribute("class", "col-xs-3");
-  station.textContent = resultObject.station;
-  var time = document.createElement("div");
-  time.setAttribute("class", "col-xs-3");
-  time.textContent = resultObject.time;
-  var actual = document.createElement("div");
-  actual.setAttribute("class", "col-xs-2");
-  actual.textContent = resultObject.actualTime;
-  var status = document.createElement("div");
-  status.setAttribute("class", "col-xs-2");
-  status.textContent = resultObject.status;
-  if (resultObject.status > 0) {
-    actual.style["color"] = "red";
-    status.style["color"] = "red";
-    status.textContent = "+" + resultObject.status;
+  var jTrain = $("<div>").addClass("col-xs-2").text(resultObject.train);
+  var jStation = $("<div>").addClass("col-xs-3").text(resultObject.station);
+  var jTime = $("<div>").addClass("col-xs-3").text(resultObject.time);
+  var jActual = $("<div>").addClass("col-xs-2").text(resultObject.actualTime);
+  var jStatus = $("<div>").addClass("col-xs-2").text(resultObject.status);
+  if (resultObject.status > 0 ) {
+    jStatus.addClass("late");
   }
-  block.appendChild(train);
-  block.appendChild(station);
-  block.appendChild(time);
-  block.appendChild(actual);
-  block.appendChild(status);
-  parent.appendChild(block);
+  jBlock.append(jTrain, jStation, jTime, jActual, jStatus);
+  $(".results").append(jBlock);
 };
 var buildAll = function(fullObject) {
-  clear(document.getElementsByClassName("results")[0]);
+  $(".results").empty();
   fullObject.forEach(function(item) {
     buildTrainResult(item);
   });
 };
-function clear(element){
-  while (element.firstChild){
-    element.removeChild(element.firstChild);
-  }
-}
 var display = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
