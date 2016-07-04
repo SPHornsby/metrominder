@@ -64,3 +64,29 @@ form {
 .type-search {
   margin-left: 10px;
 }
+.late {
+  color: red;
+}
+.map {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.map-row, .direction-row {
+  color: white;
+  font-size: 1.25em;
+
+}
+.map-row {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: #e6e6e6;
+}
+.direction-row {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #555;
+  margin-bottom: 20px;
+}
+.selected {
+  background-color: green;
+}
