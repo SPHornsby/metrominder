@@ -71,11 +71,12 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   $(row).empty();
   var now = moment();
   var nowObject = now.toObject();
-  var todayDate = `${nowObject.years}-${nowObject.months}-${nowObject.date}`;
+  var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
   var arrivalTime = todayDate + " " + timeAtStation;
   var then = now.add(parseInt(resultObject.duration, 10), "m");
-  var thenObject = then.toObject();
+  //var thenObject = then.toObject();
   var result="";
+  console.log(arrivalTime);
   if (then.isBefore(arrivalTime)) {
     result = "You will make it.";
   } else {
@@ -92,19 +93,17 @@ var getMyLocation = function() {
     console.log("Geolocation not supported");
     return;
   }
-
   function success(position) {
     var lat = position.coords.latitude;
     var long = position.coords.longitude;
-
-    console.log(`${lat},${long}`);
-
+    var location = `${lat},${long}`;
+    console.log(location);
   }
   function error() {
     console.log("error");
   }
-
   navigator.geolocation.getCurrentPosition(success, error);
+  console.log("locating...");
 };
 
 var getLatLong = function(station, callback) {

@@ -16,7 +16,22 @@ module.exports = {
         {name: "Laguna Nigel", time: {hours: 8, minutes: 15, seconds: 0}}
       ]
     },
-    {"train": 600, "route": "Northbound", "variance": 60000,
+    {"train": 681, "route": "Northbound", "variance": 0,
+      "stops":
+      [
+        {name: "Laguna Nigel", time: {hours: 4, minutes: 05, seconds: 0}},
+        {name: "Irvine", time: {hours: 4, minutes: 15, seconds: 0}},
+        {name: "Tustin", time: {hours: 4, minutes: 21, seconds: 0}},
+        {name: "Santa Ana", time: {hours: 4, minutes: 27, seconds: 0}},
+        {name: "Orange", time: {hours: 4, minutes: 32, seconds: 0}},
+        {name: "Anaheim", time: {hours: 4, minutes: 36, seconds: 0}},
+        {name: "Fullerton", time: {hours: 4, minutes: 43, seconds: 0}},
+        {name: "Buena Park", time: {hours: 4, minutes: 49, seconds: 0}},
+        {name: "Norwalk/SFS", time: {hours: 4, minutes: 57, seconds: 0}},
+        {name:"LA", time: {hours: 5, minutes: 25, seconds: 0}},
+      ]
+    },
+    {"train": 600, "route": "Southbound", "variance": 60000,
       "stops":
       [
         {name: "LA", time: {hours: 7, minutes: 58, seconds: 0}},
@@ -32,6 +47,19 @@ module.exports = {
         {name: "SJC", time: {hours: 9, minutes: 20, seconds: 0}},
         {name: "San Clemente", time: {hours: 9, minutes: 30, seconds: 0}},
         {name: "Oceanside", time: {hours: 10, minutes: 1, seconds: 0}}
+      ]
+
+    },
+    {"train": 634, "route": "Southbound", "variance": 300000,
+      "stops":
+      [
+        {name: "Fullerton", time: {hours: 13, minutes: 40, seconds: 0}},
+        {name: "Anaheim", time: {hours: 13, minutes: 47, seconds: 0}},
+        {name: "Orange", time: {hours: 13, minutes: 52, seconds: 0}},
+        {name: "Santa Ana", time: {hours: 13, minutes: 57, seconds: 0}},
+        {name: "Tustin", time: {hours: 14, minutes: 03, seconds: 0}},
+        {name: "Irvine", time: {hours: 14, minutes: 11, seconds: 0}},
+        {name: "Laguna Nigel", time: {hours: 14, minutes: 25, seconds: 0}}
       ]
 
     },
