@@ -16,9 +16,9 @@ maps.get("/", function(req, res) {
 });
 var getDirections = function(query, callback) {
   var origin = query.origin;
-  //var destination = query.destination;
+  var destination = query.destination;
   var key = env.directions;
-  var key = process.env.GD_KEY;
+  //var key = process.env.GD_KEY;
   var querystring = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
   var finalData="";
   var smashedChunk="";
