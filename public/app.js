@@ -1,11 +1,23 @@
 var buildTrainResult = function(resultObject) {
-  var jBlock = $("<div>").addClass("row station-row").attr("data-station", resultObject.station);
+  var jBlock = $("<div>")
+    .addClass("row station-row")
+    .attr("data-station", resultObject.station);
 
-  var jTrain = $("<div>").addClass("col-xs-2 station-col").text(resultObject.train);
-  var jStation = $("<div>").addClass("col-xs-3 station-col").text(resultObject.station);
-  var jTime = $("<div>").addClass("col-xs-3 station-col").text(resultObject.time);
-  var jActual = $("<div>").addClass("col-xs-2 station-col").text(resultObject.actualTime);
-  var jStatus = $("<div>").addClass("col-xs-2 station-col").text(resultObject.status);
+  var jTrain = $("<div>")
+    .addClass("col-xs-2 station-col").
+    text(resultObject.train);
+  var jStation = $("<div>")
+    .addClass("col-xs-3 station-col")
+    .text(resultObject.station);
+  var jTime = $("<div>")
+    .addClass("col-xs-3 station-col")
+    .text(resultObject.time);
+  var jActual = $("<div>")
+    .addClass("col-xs-2 station-col")
+    .text(resultObject.actualTime);
+  var jStatus = $("<div>")
+    .addClass("col-xs-2 station-col")
+    .text(resultObject.status);
   if (resultObject.status > 0 ) {
     jStatus.addClass("late");
   }
@@ -22,20 +34,24 @@ var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
 
   //TODO start caching api calls, at least for a few minutes.
-  var latLong = getLatLong(station, function(response) {
+  getLatLong(station, function(response) {
     $(".map-row").remove();
     $(".direction-row").remove();
     var containerRow = $("<div>").addClass("col-xs-10 col-xs-offset-1");
     var mapRow = $("<div>").addClass("row map-row");
     var directionRow = $("<div>").addClass("row direction-row");
-    var map = $("<img>").addClass("map").attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
+    var map = $("<img>").addClass("map")
+      .attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
     var directionContents = $("<div>").addClass(" col-xs-8 col-xs-offset-2");
 
-    var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2")
-    var directionInput = $("<input>").addClass("form-control").attr("placeholder", "Enter Address Here");
+    var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2");
+    var directionInput = $("<input>").addClass("form-control")
+      .attr("placeholder", "Enter Address Here");
     // var directionSelect = $("<select>").addClass("form-control");
     // var directionOption = $("<option>").text("Fake Location")
-    var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Will I Make It?").attr("data-station", station);
+    var directionButton = $("<button>").addClass("btn btn-default direction-button")
+      .text("Will I Make It?")
+      .attr("data-station", station);
     $(directionForm).append(directionInput, directionButton);
     //$(directionSelect).append(directionOption);
     $(directionContents).append(directionForm);
@@ -51,7 +67,8 @@ var reportResults = function(resultObject, originString) {
   var row = $(".direction-row");
   $(row).empty();
 
-  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2").text(`It will take you ${resultObject.duration} minutes to get from ${originString} to the station.`);
+  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
+    .text(`It will take you ${resultObject.duration} minutes to get from ${originString} to the station.`);
   $(row).append(results);
 };
 var getMyLocation = function() {
@@ -65,11 +82,11 @@ var getMyLocation = function() {
     var long = position.coords.longitude;
 
     console.log(`${lat},${long}`);
-    
-  };
+
+  }
   function error() {
     console.log("error");
-  };
+  }
 
   navigator.geolocation.getCurrentPosition(success, error);
 };
@@ -87,7 +104,7 @@ var getLatLong = function(station, callback) {
     } else {
       console.log("No response");
     }
-  })
+  });
 };
 var getResults = function(destination, originString) {
   console.log(destination, originString);
@@ -95,7 +112,7 @@ var getResults = function(destination, originString) {
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
   var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/maps?" + query)
+  xhr.open("GET", "/maps?" + query);
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
@@ -104,7 +121,7 @@ var getResults = function(destination, originString) {
       console.log("No results");
     }
   });
-}
+};
 var display = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
@@ -222,7 +239,7 @@ $(".results").on("click", ".direction-button", function(e) {
   var originString = e.target.form[0].value;
   console.log(station);
   console.log(originString);
-  var destination = getLatLong(station, function(response) {
+  getLatLong(station, function(response) {
 
     getResults(response, originString);
   });
