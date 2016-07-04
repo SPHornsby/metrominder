@@ -19,19 +19,29 @@ var buildAll = function(fullObject) {
   });
 };
 var createDirectionRow = function(row) {
-  $(".direction-row").remove();
   var station = $(row).attr("data-station");
-  var directionRow = $("<div>").addClass("row direction-row");
 
-  var directionContents = $("<div>").addClass("col-xs-12").text(station + " to: ");
-  var directionInput = $("<input>");
-  var directionSelect = $("<select>");
-  var directionOption = $("<option>").text("Fake Location")
-  var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Get").attr("data-station", station);
-  $(directionSelect).append(directionOption);
-  $(directionContents).append(directionSelect, directionButton);
-  $(directionRow).append(directionContents);
-  $(row).append(directionRow);
+  //TODO start caching api calls, at least for a few minutes.
+  var latLong = getLatLong(station, function(response) {
+    $(".map-row").remove();
+    $(".direction-row").remove();
+
+    var mapRow = $("<div>").addClass("row map-row");
+    var directionRow = $("<div>").addClass("row direction-row");
+    var map = $("<img>").attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
+    var directionContents = $("<div>").addClass("col-xs-12").text(station + " to: ");
+    var directionInput = $("<input>");
+    var directionSelect = $("<select>");
+    var directionOption = $("<option>").text("Fake Location")
+    var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Get").attr("data-station", station);
+    $(directionSelect).append(directionOption);
+    $(directionContents).append(directionSelect, directionButton);
+    $(directionRow).append(directionContents);
+    $(mapRow).append(map);
+    $(row).append(mapRow, directionRow);
+  });
+
+
 };
 var reportResults = function(resultObject) {
   var row = $(".direction-row");
@@ -59,7 +69,7 @@ var getMyLocation = function() {
   navigator.geolocation.getCurrentPosition(success, error);
 };
 
-var getLatLong = function(station, destinationString) {
+var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/maps/station?"+query);
@@ -67,7 +77,8 @@ var getLatLong = function(station, destinationString) {
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
       var response = JSON.parse(xhr.responseText)[0].latLong;
-      getResults(response, destinationString);
+      callback(response);
+
     } else {
       console.log("No response");
     }
@@ -199,9 +210,11 @@ $(".results").on("click", ".station-col", function(e) {
 });
 $(".results").on("click", ".direction-button", function(e) {
   var station = e.target.attributes["data-station"].value;
-
   var destinationString = "33.8989121,-117.9914261";
-  var origin = getLatLong(station, destinationString);
+  var origin = getLatLong(station, function(response) {
+    getResults(response, destinationString);
+  });
+
 });
 $(".geolocate").on("click", function() {
   getMyLocation();
