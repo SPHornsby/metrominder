@@ -25,29 +25,33 @@ var createDirectionRow = function(row) {
   var latLong = getLatLong(station, function(response) {
     $(".map-row").remove();
     $(".direction-row").remove();
-
+    var containerRow = $("<div>").addClass("col-xs-10 col-xs-offset-1");
     var mapRow = $("<div>").addClass("row map-row");
     var directionRow = $("<div>").addClass("row direction-row");
-    var map = $("<img>").attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
-    var directionContents = $("<div>").addClass("col-xs-12").text(station + " to: ");
-    var directionInput = $("<input>");
-    var directionSelect = $("<select>");
-    var directionOption = $("<option>").text("Fake Location")
-    var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Get").attr("data-station", station);
-    $(directionSelect).append(directionOption);
-    $(directionContents).append(directionSelect, directionButton);
+    var map = $("<img>").addClass("map").attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
+    var directionContents = $("<div>").addClass(" col-xs-8 col-xs-offset-2");
+
+    var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2")
+    var directionInput = $("<input>").addClass("form-control").attr("placeholder", "Enter Address Here");
+    // var directionSelect = $("<select>").addClass("form-control");
+    // var directionOption = $("<option>").text("Fake Location")
+    var directionButton = $("<button>").addClass("btn btn-default direction-button").text("Will I Make It?").attr("data-station", station);
+    $(directionForm).append(directionInput, directionButton);
+    //$(directionSelect).append(directionOption);
+    $(directionContents).append(directionForm);
     $(directionRow).append(directionContents);
     $(mapRow).append(map);
-    $(row).append(mapRow, directionRow);
+    $(containerRow).append(mapRow, directionRow);
+    $(row).append(containerRow);
   });
 
 
 };
-var reportResults = function(resultObject) {
+var reportResults = function(resultObject, originString) {
   var row = $(".direction-row");
   $(row).empty();
 
-  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2").text(`It will take you ${resultObject.duration} minutes to get from that location to the station.`);
+  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2").text(`It will take you ${resultObject.duration} minutes to get from ${originString} to the station.`);
   $(row).append(results);
 };
 var getMyLocation = function() {
@@ -84,8 +88,9 @@ var getLatLong = function(station, callback) {
     }
   })
 };
-var getResults = function(origin, destinationString) {
-  var destination = destinationString.split(" ").join("+");
+var getResults = function(destination, originString) {
+  console.log(destination, originString);
+  var origin = originString.split(" ").join("+");
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
   var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
@@ -93,7 +98,7 @@ var getResults = function(origin, destinationString) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      reportResults(JSON.parse(xhr.responseText));
+      reportResults(JSON.parse(xhr.responseText), originString);
     } else {
       console.log("No results");
     }
@@ -209,10 +214,16 @@ $(".results").on("click", ".station-col", function(e) {
   createDirectionRow(row);
 });
 $(".results").on("click", ".direction-button", function(e) {
+  e.preventDefault();
   var station = e.target.attributes["data-station"].value;
-  var destinationString = "33.8989121,-117.9914261";
-  var origin = getLatLong(station, function(response) {
-    getResults(response, destinationString);
+  console.log(e.target.form[0].value);
+  //var originString = "33.8989121,-117.9914261";
+  var originString = e.target.form[0].value;
+  console.log(station);
+  console.log(originString);
+  var destination = getLatLong(station, function(response) {
+
+    getResults(response, originString);
   });
 
 });
