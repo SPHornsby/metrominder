@@ -32,7 +32,8 @@ var getDirections = function(query, callback) {
       //callback(finalData);
       var result = JSON.parse(smashedChunk);
       var importantData = result.routes[0].legs[0];
-      var returnObject = {distance: importantData.distance.text, duration: importantData.duration.text};
+      var justMinutes = importantData.duration.text.split(" ")[0];
+      var returnObject = {distance: importantData.distance.text, duration: justMinutes};
       callback(returnObject);
     });
   });

@@ -32,9 +32,10 @@ var buildAll = function(fullObject) {
 };
 var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
-
+  var timeAtStation = row.childNodes[3].textContent;
   //TODO start caching api calls, at least for a few minutes.
   getLatLong(station, function(response) {
+    //$(row).toggleClass("selected");
     $(".map-row").remove();
     $(".direction-row").remove();
     var containerRow = $("<div>").addClass("col-xs-10 col-xs-offset-1");
@@ -46,12 +47,14 @@ var createDirectionRow = function(row) {
 
     var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2");
     var directionInput = $("<input>").addClass("form-control")
-      .attr("placeholder", "Enter Address Here");
+      .attr("placeholder", "4590 MacArthur Blvd, Newport Beach, CA 92660")
+      .val("4590 MacArthur Blvd, Newport Beach, CA 92660");
     // var directionSelect = $("<select>").addClass("form-control");
     // var directionOption = $("<option>").text("Fake Location")
     var directionButton = $("<button>").addClass("btn btn-default direction-button")
       .text("Will I Make It?")
-      .attr("data-station", station);
+      .attr("data-station", station)
+      .attr("data-time", timeAtStation);
     $(directionForm).append(directionInput, directionButton);
     //$(directionSelect).append(directionOption);
     $(directionContents).append(directionForm);
@@ -63,12 +66,25 @@ var createDirectionRow = function(row) {
 
 
 };
-var reportResults = function(resultObject, originString) {
+var reportResults = function(resultObject, originString, timeAtStation) {
   var row = $(".direction-row");
   $(row).empty();
-
+  var now = moment();
+  var nowObject = now.toObject();
+  var todayDate = `${nowObject.years}-${nowObject.months}-${nowObject.date}`;
+  var arrivalTime = todayDate + " " + timeAtStation;
+  var then = now.add(parseInt(resultObject.duration, 10), "m");
+  var thenObject = then.toObject();
+  var result="";
+  if (then.isBefore(arrivalTime)) {
+    result = "You will make it.";
+  } else {
+    result = "You will not make it.";
+  }
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
-    .text(`It will take you ${resultObject.duration} minutes to get from ${originString} to the station.`);
+    .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
+      It will take you ${resultObject.duration} minutes to get from ${originString} to the station.
+      The train arrives to this station at ${timeAtStation}. \n${result}`);
   $(row).append(results);
 };
 var getMyLocation = function() {
@@ -106,7 +122,7 @@ var getLatLong = function(station, callback) {
     }
   });
 };
-var getResults = function(destination, originString) {
+var getResults = function(destination, originString, timeAtStation) {
   console.log(destination, originString);
   var origin = originString.split(" ").join("+");
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
@@ -116,7 +132,7 @@ var getResults = function(destination, originString) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      reportResults(JSON.parse(xhr.responseText), originString);
+      reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
     } else {
       console.log("No results");
     }
@@ -228,20 +244,18 @@ $(".search-close").on("click", function() {
 });
 $(".results").on("click", ".station-col", function(e) {
   var row = e.target.parentNode;
-
+  console.log(e.target.parentNode.childNodes[3].textContent);
   createDirectionRow(row);
 });
 $(".results").on("click", ".direction-button", function(e) {
   e.preventDefault();
   var station = e.target.attributes["data-station"].value;
-  console.log(e.target.form[0].value);
+  var timeAtStation = e.target.attributes["data-time"].value;
   //var originString = "33.8989121,-117.9914261";
   var originString = e.target.form[0].value;
-  console.log(station);
-  console.log(originString);
-  getLatLong(station, function(response) {
 
-    getResults(response, originString);
+  getLatLong(station, function(response) {
+    getResults(response, originString, timeAtStation);
   });
 
 });
