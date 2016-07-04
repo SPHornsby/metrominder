@@ -1,5 +1,6 @@
 var maps = require("express").Router();
 var locations = require("../data/locations.js").data;
+//comment out env for heroku deploy
 var env = require("../ENV.js").keys[0];
 const https = require("https");
 maps.get("/station", function(req, res) {
@@ -17,6 +18,7 @@ var getDirections = function(query, callback) {
   var origin = query.origin;
   var destination = query.destination;
   var key = env.directions;
+  //var key = process.env.GD_KEY;
   var querystring = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
   var finalData="";
   var smashedChunk="";
