@@ -1,6 +1,14 @@
 var maps = require("express").Router();
+var locations = require("../data/locations.js").data;
 var env = require('../ENV.js').keys[0];
 const https = require('https');
+
+maps.get("/station", function(req, res) {
+  var query = req.query.station;
+  var latLong = locations.filter( (location) => location.name === query);
+  console.log(latLong);
+  res.send(latLong);
+})
 
 maps.get("/", function(req, res) {
   var query=req.query;

@@ -40,8 +40,44 @@ var reportResults = function(resultObject) {
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2").text(`It will take you ${resultObject.duration} minutes to get from that location to the station.`);
   $(row).append(results);
 };
-var getResults = function() {
-  var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
+var getMyLocation = function() {
+  if (!navigator.geolocation) {
+    console.log("Geolocation not supported");
+    return;
+  }
+
+  function success(position) {
+    var lat = position.coords.latitude;
+    var long = position.coords.longitude;
+
+    console.log(`${lat},${long}`);
+  };
+  function error() {
+    console.log("error");
+  };
+
+  navigator.geolocation.getCurrentPosition(success, error);
+};
+
+var getLatLong = function(station, destinationString) {
+  var query = `station=${station}`;
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/maps/station?"+query);
+  xhr.send();
+  xhr.addEventListener("load", function() {
+    if (xhr.responseText) {
+      var response = JSON.parse(xhr.responseText)[0].latLong;
+      getResults(response, destinationString);
+    } else {
+      console.log("No response");
+    }
+  })
+};
+var getResults = function(origin, destinationString) {
+  var destination = destinationString.split(" ").join("+");
+  console.log(destination);
+  //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
+  var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/maps?" + query)
   xhr.send();
@@ -165,8 +201,16 @@ $(".results").on("click", ".station-col", function(e) {
   createDirectionRow(row);
 });
 $(".results").on("click", ".direction-button", function(e) {
-
-  getResults();
+  console.log(e);
+  var station = e.target.attributes["data-station"].value;
+  console.log(station);
+  var destinationString = "1501 South Beach Blvd, La Habra, CA 90631";
+  var origin = getLatLong(station, destinationString);
+  console.log(`origin ${origin}`);
+  // getResults();
+});
+$(".geolocate").on("click", function() {
+  getMyLocation();
 });
 $(function(){
   getTrains("/train?route=all");

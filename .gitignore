@@ -38,3 +38,6 @@ jspm_packages
 
 # ESLint
 .eslintrc.json
+
+ENV.js
+.gitignore
