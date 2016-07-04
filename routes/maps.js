@@ -6,7 +6,6 @@ const https = require('https');
 maps.get("/station", function(req, res) {
   var query = req.query.station;
   var latLong = locations.filter( (location) => location.name === query);
-  console.log(latLong);
   res.send(latLong);
 })
 
@@ -23,7 +22,6 @@ var getDirections = function(query, callback) {
   var origin = query.origin;
   var destination = query.destination;
   var key = env.directions;
-  console.log("Getting");
   var querystring = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
   var finalData="";
   var smashedChunk="";

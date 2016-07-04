@@ -75,7 +75,6 @@ var getLatLong = function(station, destinationString) {
 };
 var getResults = function(origin, destinationString) {
   var destination = destinationString.split(" ").join("+");
-  console.log(destination);
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
   var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
@@ -146,10 +145,8 @@ var trainsSelector = function(trainOptions) {
   });
   selector.empty().append(options.join(""));
 };
-
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
-
   var route = form[0].value;
   var train = form[1].value;
   var station = form[2].value;
@@ -201,13 +198,10 @@ $(".results").on("click", ".station-col", function(e) {
   createDirectionRow(row);
 });
 $(".results").on("click", ".direction-button", function(e) {
-  console.log(e);
   var station = e.target.attributes["data-station"].value;
-  console.log(station);
-  var destinationString = "1501 South Beach Blvd, La Habra, CA 90631";
+
+  var destinationString = "33.8989121,-117.9914261";
   var origin = getLatLong(station, destinationString);
-  console.log(`origin ${origin}`);
-  // getResults();
 });
 $(".geolocate").on("click", function() {
   getMyLocation();
