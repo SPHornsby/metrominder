@@ -65,6 +65,7 @@ var getMyLocation = function() {
     var long = position.coords.longitude;
 
     console.log(`${lat},${long}`);
+    
   };
   function error() {
     console.log("error");
@@ -234,4 +235,5 @@ $(function(){
   getTrains("/train?route=all");
   $(".search-area").hide();
   initialResults();
+  getMyLocation();
 });
