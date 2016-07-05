@@ -112,7 +112,12 @@ var getMyLocation = function() {
   navigator.geolocation.getCurrentPosition(success, error);
   console.log("locating...");
 };
-
+var initMap = function() {
+  map = new google.maps.Map(document.getElementById("gMap"), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 8
+  });
+}
 var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
@@ -173,7 +178,8 @@ var initialResults = function() {
     }
   });
 };
-var getTrains = function(query) {
+var getTrains = function(query, callback) {
+
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
   xhr.setRequestHeader("Content-type", "text/html");
@@ -182,15 +188,16 @@ var getTrains = function(query) {
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
       if (parsed.length > 0) {
-        trainsSelector(JSON.parse(xhr.responseText));
+        callback(JSON.parse(xhr.responseText));
       } else {
-        getTrains("/train?route=all");
+        getTrains("/train?route=all", callback);
       }
     } else {
       console.log("No response");
     }
   });
 };
+//TODO make getTrains and trainsSelector generic so they can work on trains and stations selects
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#trains");
@@ -202,6 +209,21 @@ var trainsSelector = function(trainOptions) {
   });
   selector.empty().append(options.join(""));
 };
+var getStations = function(query) {
+
+};
+var stationsSelector = function(stationOptions) {
+  var options = ["<option>None</option>"];
+  var selector = $("#stations");
+  // if (trainOptions.length === 0) {
+  //   trainOptions = getTrains("/train?route=all");
+  // }
+  stationOptions.forEach(function(station) {
+    options.push(`<option>${station.station}</option>`);
+  });
+  selector.empty().append(options.join(""));
+};
+
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
   var route = form[0].value;
@@ -235,7 +257,12 @@ $(".train-search").on("click", function(e) {
 $("#route").on("change", function(e) {
   var route = e.target.value;
   var query = `/train?route=${route}`;
-  getTrains(query);
+  getTrains(query, trainsSelector);
+});
+$("#trains").on("change", function(e) {
+  var train = e.target.value;
+  var query = `/search?train=${train}`;
+  getTrains(query, stationsSelector);
 });
 $("#show-search").on("click", function() {
   //$(".search-bar").toggleClass("hidden");
@@ -270,8 +297,9 @@ $(".geolocate").on("click", function() {
   getMyLocation();
 });
 $(function(){
-  getTrains("/train?route=all");
+  getTrains("/train?route=all", trainsSelector);
   $(".search-area").hide();
-  initialResults();
+  //initialResults();
   getMyLocation();
+  //initMap();
 });

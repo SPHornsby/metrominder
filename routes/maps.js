@@ -22,7 +22,7 @@ var getDirections = function(query, callback) {
   var querystring = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
   var finalData="";
   var smashedChunk="";
-  var req = https.request(querystring, function (res) {
+  var req = https.request(querystring, function(res) {
     //console.log(res);
     res.on("data", function(chunk) {
       var textChunk = chunk.toString("utf8");

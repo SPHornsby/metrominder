@@ -3,6 +3,7 @@ var schedule = require("../data/schedule").data;
 
 train.get("/", function(req, res) {
   var route = req.query.route,
+    
     trains;
   if (route === "all") {
     trains = schedule.map(item => item.train);
