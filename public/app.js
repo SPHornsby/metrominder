@@ -81,18 +81,20 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   if (thenObject.minutes <= 9) {
     thenObject.minutes = "0" + thenObject.minutes;
   }
-  var result="";
+  var result=$("<span>");
   console.log(arrivalTime);
   if (then.isBefore(arrivalTime)) {
-    result = "You will make it.";
+    result.text("You will make it.");
+    row.addClass("safe");
   } else {
-    result = "You will not make it.";
+    result.text("You will not make it.");
+    row.addClass("too-late");
   }
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
       It is a ${resultObject.duration} minute drive to get from ${originString} to the station.
       You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
-      The train arrives to this station at ${timeAtStation}. \n${result}`);
+      The train arrives to this station at ${timeAtStation}.`).append(result);
   $(row).append(results);
 };
 var getMyLocation = function() {

@@ -90,3 +90,9 @@ form {
 .selected {
   background-color: green;
 }
+.safe {
+  background-color: green;
+}
+.too-late {
+  background-color: red;
+}
