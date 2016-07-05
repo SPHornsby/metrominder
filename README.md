@@ -1,5 +1,5 @@
-[MetroMinder on Heroku](https://metrominder.herokuapp.com/)
 
+<a href="https://metrominder.herokuapp.com/" target="_blank">MetroMinder on Heroku</a>
 # metrominder
 An app for commuters who want to check if their trains are running on schedule.
 
