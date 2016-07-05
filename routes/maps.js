@@ -22,7 +22,7 @@ var getDirections = function(query, callback) {
   var querystring = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
   var finalData="";
   var smashedChunk="";
-  var req = https.request(querystring, function (res) {
+  var req = https.request(querystring, function(res) {
     //console.log(res);
     res.on("data", function(chunk) {
       var textChunk = chunk.toString("utf8");
@@ -33,9 +33,16 @@ var getDirections = function(query, callback) {
     res.on("end", function() {
       //callback(finalData);
       var result = JSON.parse(smashedChunk);
-      var importantData = result.routes[0].legs[0];
-      var justMinutes = importantData.duration.text.split(" ")[0];
-      var returnObject = {distance: importantData.distance.text, duration: justMinutes};
+
+      if (result.status === "OK") {
+
+        var importantData = result.routes[0].legs[0];
+        var justMinutes = importantData.duration.text.split(" ")[0];
+        var returnObject = {distance: importantData.distance.text, duration: justMinutes};
+      } else {
+        returnObject = "SOMETHING";
+      }
+
       callback(returnObject);
     });
   });

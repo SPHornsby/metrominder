@@ -71,21 +71,30 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   $(row).empty();
   var now = moment();
   var nowObject = now.toObject();
+  if (nowObject.minutes <= 9) {
+    nowObject.minutes = "0" + nowObject.minutes;
+  }
   var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
   var arrivalTime = todayDate + " " + timeAtStation;
   var then = now.add(parseInt(resultObject.duration, 10), "m");
-  //var thenObject = then.toObject();
-  var result="";
+  var thenObject = then.toObject();
+  if (thenObject.minutes <= 9) {
+    thenObject.minutes = "0" + thenObject.minutes;
+  }
+  var result=$("<span>");
   console.log(arrivalTime);
   if (then.isBefore(arrivalTime)) {
-    result = "You will make it.";
+    result.text("You will make it.");
+    row.addClass("safe");
   } else {
-    result = "You will not make it.";
+    result.text("You will not make it.");
+    row.addClass("too-late");
   }
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
-      It will take you ${resultObject.duration} minutes to get from ${originString} to the station.
-      The train arrives to this station at ${timeAtStation}. \n${result}`);
+      It is a ${resultObject.duration} minute drive to get from ${originString} to the station.
+      You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
+      The train arrives to this station at ${timeAtStation}.`).append(result);
   $(row).append(results);
 };
 var getMyLocation = function() {
@@ -105,7 +114,12 @@ var getMyLocation = function() {
   navigator.geolocation.getCurrentPosition(success, error);
   console.log("locating...");
 };
-
+var initMap = function() {
+  map = new google.maps.Map(document.getElementById("gMap"), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 8
+  });
+}
 var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
@@ -131,6 +145,7 @@ var getResults = function(destination, originString, timeAtStation) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
+      console.log(xhr.responseText);
       reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
     } else {
       console.log("No results");
@@ -165,7 +180,8 @@ var initialResults = function() {
     }
   });
 };
-var getTrains = function(query) {
+var getTrains = function(query, callback) {
+
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
   xhr.setRequestHeader("Content-type", "text/html");
@@ -174,15 +190,16 @@ var getTrains = function(query) {
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
       if (parsed.length > 0) {
-        trainsSelector(JSON.parse(xhr.responseText));
+        callback(JSON.parse(xhr.responseText));
       } else {
-        getTrains("/train?route=all");
+        getTrains("/train?route=all", callback);
       }
     } else {
       console.log("No response");
     }
   });
 };
+//TODO make getTrains and trainsSelector generic so they can work on trains and stations selects
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#trains");
@@ -194,6 +211,21 @@ var trainsSelector = function(trainOptions) {
   });
   selector.empty().append(options.join(""));
 };
+var getStations = function(query) {
+
+};
+var stationsSelector = function(stationOptions) {
+  var options = ["<option>None</option>"];
+  var selector = $("#stations");
+  // if (trainOptions.length === 0) {
+  //   trainOptions = getTrains("/train?route=all");
+  // }
+  stationOptions.forEach(function(station) {
+    options.push(`<option>${station.station}</option>`);
+  });
+  selector.empty().append(options.join(""));
+};
+
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
   var route = form[0].value;
@@ -227,7 +259,12 @@ $(".train-search").on("click", function(e) {
 $("#route").on("change", function(e) {
   var route = e.target.value;
   var query = `/train?route=${route}`;
-  getTrains(query);
+  getTrains(query, trainsSelector);
+});
+$("#trains").on("change", function(e) {
+  var train = e.target.value;
+  var query = `/search?train=${train}`;
+  getTrains(query, stationsSelector);
 });
 $("#show-search").on("click", function() {
   //$(".search-bar").toggleClass("hidden");
@@ -262,8 +299,9 @@ $(".geolocate").on("click", function() {
   getMyLocation();
 });
 $(function(){
-  getTrains("/train?route=all");
+  getTrains("/train?route=all", trainsSelector);
   $(".search-area").hide();
-  initialResults();
+  //initialResults();
   getMyLocation();
+  //initMap();
 });
