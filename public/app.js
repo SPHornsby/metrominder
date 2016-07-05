@@ -71,10 +71,16 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   $(row).empty();
   var now = moment();
   var nowObject = now.toObject();
+  if (nowObject.minutes <= 9) {
+    nowObject.minutes = "0" + nowObject.minutes;
+  }
   var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
   var arrivalTime = todayDate + " " + timeAtStation;
   var then = now.add(parseInt(resultObject.duration, 10), "m");
-  //var thenObject = then.toObject();
+  var thenObject = then.toObject();
+  if (thenObject.minutes <= 9) {
+    thenObject.minutes = "0" + thenObject.minutes;
+  }
   var result="";
   console.log(arrivalTime);
   if (then.isBefore(arrivalTime)) {
@@ -84,7 +90,8 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   }
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
-      It will take you ${resultObject.duration} minutes to get from ${originString} to the station.
+      It is a ${resultObject.duration} minute drive to get from ${originString} to the station.
+      You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
       The train arrives to this station at ${timeAtStation}. \n${result}`);
   $(row).append(results);
 };
@@ -131,6 +138,7 @@ var getResults = function(destination, originString, timeAtStation) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
+      console.log(xhr.responseText);
       reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
     } else {
       console.log("No results");

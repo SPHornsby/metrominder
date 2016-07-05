@@ -21,9 +21,9 @@ train.put("/:train/:delay", function(req, res) {
   if (index !== -1) {
     schedule[index].variance = parseInt(delay, 10);
     result = schedule[index];
-    res.send(result);
+    res.status(200).send(result);
   } else {
-    res.send(result);
+    res.status(400).send(result);
   }
 
 });

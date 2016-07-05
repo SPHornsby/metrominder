@@ -26,6 +26,7 @@
   "homepage": "https://github.com/SPHornsby/metrominder#readme",
   "dependencies": {
     "express": "^4.14.0",
-    "moment": "^2.14.1"
+    "moment": "^2.14.1",
+    "nodemon": "^1.9.2"
   }
 }
