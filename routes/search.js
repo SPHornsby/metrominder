@@ -6,7 +6,7 @@ search.get("/", function(req, res) {
   var route = req.query.route,
     station = req.query.station,
     trainNumber = req.query.train,
-    timeCheck = req.query.train,
+    timeCheck = false,
     trains = schedule;
 
   trains = trains.map((train) => {
@@ -24,7 +24,7 @@ search.get("/", function(req, res) {
     trains = trains.filter(train => train.station === station);
 
   }
-  if (timeCheck !== undefined) {
+  if (timeCheck) {
     trains = trains.filter(function(train) {
       var now = moment();
       var nowObject = now.toObject();
@@ -33,7 +33,6 @@ search.get("/", function(req, res) {
       return now.isBefore(arrivalTime);
     });
   }
-  console.log(trains);
   res.send(trains);
 });
 
