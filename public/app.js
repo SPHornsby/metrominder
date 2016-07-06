@@ -7,16 +7,16 @@ var buildTrainResult = function(resultObject) {
     .addClass("col-xs-2 station-col").
     text(resultObject.train);
   var jStation = $("<div>")
-    .addClass("col-xs-3 station-col")
+    .addClass("col-xs-5 col-sm-3 station-col")
     .text(resultObject.station);
   var jTime = $("<div>")
-    .addClass("col-xs-3 station-col")
+    .addClass("hidden-xs col-sm-3 station-col")
     .text(resultObject.time);
   var jActual = $("<div>")
     .addClass("col-xs-2 station-col")
     .text(resultObject.actualTime);
   var jStatus = $("<div>")
-    .addClass("col-xs-2 station-col")
+    .addClass("col-xs-2 station-col delay-col")
     .text(resultObject.status);
   if (resultObject.status > 0 ) {
     jStatus.addClass("late");
@@ -46,15 +46,16 @@ var createDirectionRow = function(row) {
     var directionRow = $("<div>").addClass("row direction-row");
     // var map = $("<img>").addClass("map")
     //   .attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
-    var directionContents = $("<div>").addClass(" col-xs-8 col-xs-offset-2");
+    var directionContents = $("<div>").addClass(" col-xs-10 col-xs-offset-1");
 
-    var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2");
-    var directionInput = $("<input>").addClass("form-control")
+    var directionForm = $("<form>").addClass("form col-xs-12");
+    var directionInput = $("<input>").addClass("form-control col-xs-10")
       .attr("placeholder", "4590 MacArthur Blvd, Newport Beach, CA 92660")
+      .attr("width", "150")
       .val("4590 MacArthur Blvd, Newport Beach, CA 92660");
     // var directionSelect = $("<select>").addClass("form-control");
     // var directionOption = $("<option>").text("Fake Location")
-    var directionButton = $("<button>").addClass("btn btn-default direction-button")
+    var directionButton = $("<button>").addClass("btn btn-info direction-button")
       .text("Will I Make It?")
       .attr("data-station", station)
       .attr("data-time", timeAtStation);
@@ -94,12 +95,14 @@ var reportResults = function(resultObject, originString, timeAtStation) {
     result.text("You will not make it.");
     row.addClass("too-late");
   }
-  var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
+  var smallResult = $("<div>").addClass("visible-xs-block col-xs-8 xol-xs-offset-2")
+  .text(``).append(result);
+  var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
       It is a ${resultObject.duration} minute drive to get to the station.
       You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
-      The train arrives to this station at ${timeAtStation}. `).append(result);
-  $(row).append(results);
+      The train arrives to this station at ${timeAtStation}. `);
+  $(row).append(result, results);
 };
 var getMyLocation = function() {
   if (!navigator.geolocation) {

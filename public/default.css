@@ -1,5 +1,16 @@
 body {
-
+  font-size: 1.5em;
+}
+/*h1 {
+  padding-top: 20px;
+}*/
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3.5em;
+  }
+  body {
+    font-size: 1.5em;
+  }
 }
 .app {
   color: white;
@@ -12,9 +23,9 @@ body {
   padding-top: 2px;
   padding-bottom: 5px;
 }
-.top h1 {
+/*.top h1 {
   font-size: 3.5em;
-}
+}*/
 .search-area, .search-bar {
   background-color: #3fb4da;
   /*font-family: 'Rajdhani', Arial, sans-serif;*/
@@ -100,4 +111,32 @@ form {
 }
 .too-late {
   background-color: red;
+}
+label {
+  position: relative;
+  top: 50%;
+  transform: translateY(44%) translateX(-30%);
+}
+.station-col {
+  padding-left: 10%;
+}
+.heading-col {
+  padding-left: 8%;
+}
+.station-heading {
+  padding-left: 9%;
+}
+@media (min-width: 768px) {
+  .station-col {
+    padding-left: inherit;
+  }
+  .heading-col {
+    padding-left: inherit;
+  }
+  .station-heading {
+    padding-left: inherit;
+  }
+  .delay-col {
+    padding-right: 0;
+  }
 }

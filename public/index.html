@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width">
     <title>MetroMinder</title>
     <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -12,75 +13,73 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </head>
   <body>
-
     <div class="container-fluid text-center">
-      <div class="col-sm-12 col-md-6 col-md-offset-3 app">
+      <div class="col-xs-12 col-md-6 col-md-offset-3 app">
         <div class="top">
           <h1>MetroMinder</h1>
         </div>
         <div class="search-bar">
-          <button type="button" name="button" class="btn btn-default btn-sm" id="show-search">Search</button>
+          <button type="button" name="button" class="btn btn-info btn-sm" id="show-search">Search</button>
         </div>
         <div class="search-area">
-          <form class="form-horizontal" >
-            <div class="row">
-
-
-              <div class="col-md-8 col-md-offset-2 ">
-                <span class="glyphicon glyphicon-remove search-close"></span>
-                <div class="form-group">
-                  <label for="route">Route: </label>
-                  <select class="form-control" id="route">
-                    <option>None</option>
-                    <option>Southbound</option>
-                    <option>Northbound</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="trains">Train:</label>
-                  <select class="form-control" id="trains">
-
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Station:</label>
-                  <select class="form-control" id="stations">
-                    <option>None</option>
-                    <option>LA</option>
-                    <option>Norwalk/SFS</option>
-                    <option>Buena Park</option>
-                    <option>Fullerton</option>
-                    <option>Anaheim</option>
-                    <option>Orange</option>
-                    <option>Santa Ana</option>
-                    <option>Tustin</option>
-                    <option>Irvine</option>
-                    <option>Laguna Nigel</option>
-                    <option>San Clemente</option>
-                    <option>Oceanside</option>
-                  </select>
-                </div>
-                <button type="button"  class="btn btn-default train-search" name="button">Search</button>
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="route" class="col-xs-2 control-label">Route:</label>
+              <div class="col-xs-10">
+                <select class="form-control" id="route">
+                  <option>None</option>
+                  <option>Southbound</option>
+                  <option>Northbound</option>
+                </select>
               </div>
             </div>
+            <div class="form-group">
+              <label for="trains" class="col-xs-2 control-label">Train:</label>
+              <div class="col-xs-10">
+                <select class="form-control" id="trains">
 
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="stations" class="col-xs-2 control-label">Station:</label>
+              <div class="col-xs-10">
+                <select class="form-control" id="stations">
+                  <option>None</option>
+                  <option>LA</option>
+                  <option>Norwalk/SFS</option>
+                  <option>Buena Park</option>
+                  <option>Fullerton</option>
+                  <option>Anaheim</option>
+                  <option>Orange</option>
+                  <option>Santa Ana</option>
+                  <option>Tustin</option>
+                  <option>Irvine</option>
+                  <option>Laguna Nigel</option>
+                  <option>San Clemente</option>
+                  <option>Oceanside</option>
+                </select>
+              </div>
+              <button type="button"  class="btn btn-info train-search" name="button">Search</button>
+            </div>
           </form>
+        
         </div>
         <div class="results-header">
           <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-2 heading-col">
               Train
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-5 station-heading col-sm-3">
               Station
             </div>
-            <div class="col-xs-3">
+            <div class="hidden-xs heading-col col-sm-3">
               Scheduled
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2 heading-col">
               Actual
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-2heading-col">
               Delay
             </div>
           </div>
