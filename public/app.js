@@ -42,10 +42,10 @@ var createDirectionRow = function(row) {
     $(".map-row").remove();
     $(".direction-row").remove();
     var containerRow = $("<div>").addClass("col-xs-10 col-xs-offset-1");
-    var mapRow = $("<div>").addClass("row map-row");
+    // var mapRow = $("<div>").addClass("row map-row");
     var directionRow = $("<div>").addClass("row direction-row");
-    var map = $("<img>").addClass("map")
-      .attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
+    // var map = $("<img>").addClass("map")
+    //   .attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
     var directionContents = $("<div>").addClass(" col-xs-8 col-xs-offset-2");
 
     var directionForm = $("<form>").addClass("form col-xs-8 col-xs-offset-2");
@@ -62,8 +62,9 @@ var createDirectionRow = function(row) {
     //$(directionSelect).append(directionOption);
     $(directionContents).append(directionForm);
     $(directionRow).append(directionContents);
-    $(mapRow).append(map);
-    $(containerRow).append(mapRow, directionRow);
+    //$(mapRow).append(map);
+    //$(containerRow).append(mapRow, directionRow);
+    $(containerRow).append(directionRow);
     $(row).append(containerRow);
   });
 

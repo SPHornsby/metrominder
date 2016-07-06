@@ -84,10 +84,13 @@ form {
 .direction-row {
   padding-top: 10px;
   padding-bottom: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   background-color: #555;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .selected {
   background-color: green;

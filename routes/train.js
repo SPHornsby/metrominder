@@ -3,18 +3,12 @@ var schedule = require("../data/schedule").data;
 
 train.get("/", function(req, res) {
   var route = req.query.route,
-
     trains=schedule;
-      console.log(`q.route${route}`);
   if (route === "None") {
-    console.log(trains);
-    // trains = schedule.map(item => item.train);
   } else {
     console.log("else");
     trains = schedule.filter(train => train.route === route);
-    // .map(item => item.train);
   }
-  //var trains = schedule.filter(train => train.route === route).map(item => item.train);
   res.send(trains);
 });
 train.put("/:train/:delay", function(req, res) {
@@ -30,7 +24,5 @@ train.put("/:train/:delay", function(req, res) {
   } else {
     res.status(400).send(result);
   }
-
 });
-
 module.exports = train;
