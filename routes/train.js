@@ -4,11 +4,15 @@ var schedule = require("../data/schedule").data;
 train.get("/", function(req, res) {
   var route = req.query.route,
 
-    trains;
-  if (route === "all") {
-    trains = schedule.map(item => item.train);
+    trains=schedule;
+      console.log(`q.route${route}`);
+  if (route === "None") {
+    console.log(trains);
+    // trains = schedule.map(item => item.train);
   } else {
-    trains = schedule.filter(train => train.route === route).map(item => item.train);
+    console.log("else");
+    trains = schedule.filter(train => train.route === route);
+    // .map(item => item.train);
   }
   //var trains = schedule.filter(train => train.route === route).map(item => item.train);
   res.send(trains);

@@ -26,6 +26,9 @@ var buildTrainResult = function(resultObject) {
 };
 var buildAll = function(fullObject) {
   $(".results").empty();
+  if (fullObject.length === 0) {
+    $(".results").append($("<div>").text("No Results - All trains meeting your search have stopped running for the day."));
+  }
   fullObject.forEach(function(item) {
     buildTrainResult(item);
   });
@@ -82,7 +85,7 @@ var reportResults = function(resultObject, originString, timeAtStation) {
     thenObject.minutes = "0" + thenObject.minutes;
   }
   var result=$("<span>");
-  console.log(arrivalTime);
+
   if (then.isBefore(arrivalTime)) {
     result.text("You will make it.");
     row.addClass("safe");
@@ -136,7 +139,7 @@ var getLatLong = function(station, callback) {
   });
 };
 var getResults = function(destination, originString, timeAtStation) {
-  console.log(destination, originString);
+
   var origin = originString.split(" ").join("+");
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
   var query = `origin=${origin}&destination=${destination}`;
@@ -145,7 +148,7 @@ var getResults = function(destination, originString, timeAtStation) {
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      console.log(xhr.responseText);
+
       reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
     } else {
       console.log("No results");
@@ -160,7 +163,6 @@ var display = function getRouteOnly(query) {
   xhr.addEventListener("load", function() {
 
     if (xhr.responseText) {
-
       buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
@@ -184,7 +186,7 @@ var getTrains = function(query, callback) {
 
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
-  console.log(query);
+
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
@@ -194,7 +196,7 @@ var getTrains = function(query, callback) {
       if (parsed.length > 0) {
         callback(JSON.parse(xhr.responseText));
       } else {
-        getTrains("/train?route=all", callback);
+        console.log(parsed);
       }
     } else {
       console.log("No response");
@@ -205,11 +207,9 @@ var getTrains = function(query, callback) {
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#trains");
-  // if (trainOptions.length === 0) {
-  //   trainOptions = getTrains("/train?route=all");
-  // }
   trainOptions.forEach(function(train) {
-    options.push(`<option>${train}</option>`);
+    //train.train
+    options.push(`<option>${train.train}</option>`);
   });
   selector.empty().append(options.join(""));
 };
@@ -219,9 +219,6 @@ var getStations = function(query) {
 var stationsSelector = function(stationOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#stations");
-  // if (trainOptions.length === 0) {
-  //   trainOptions = getTrains("/train?route=all");
-  // }
   stationOptions.forEach(function(station) {
     options.push(`<option>${station.station}</option>`);
   });
@@ -300,7 +297,7 @@ $(".geolocate").on("click", function() {
   getMyLocation();
 });
 $(function(){
-  getTrains("/train?route=all", trainsSelector);
+  getTrains("/search?route=None", trainsSelector);
   $(".search-area").hide();
   //initialResults();
   //getMyLocation();
