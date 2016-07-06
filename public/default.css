@@ -140,3 +140,6 @@ label {
     padding-right: 0;
   }
 }
+#main, .app {
+  padding:0;
+}
