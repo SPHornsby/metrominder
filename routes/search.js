@@ -1,11 +1,12 @@
 var search = require("express").Router();
 var schedule = require("../data/schedule").data;
 var time = require("../time.js");
-
+var moment = require("moment");
 search.get("/", function(req, res) {
   var route = req.query.route,
     station = req.query.station,
     trainNumber = req.query.train,
+    timeCheck = req.query.train,
     trains = schedule;
 
   trains = trains.map((train) => {
@@ -23,6 +24,16 @@ search.get("/", function(req, res) {
     trains = trains.filter(train => train.station === station);
 
   }
+  if (timeCheck !== undefined) {
+    trains = trains.filter(function(train) {
+      var now = moment();
+      var nowObject = now.toObject();
+      var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
+      var arrivalTime = todayDate + " " + train.actualTime;
+      return now.isBefore(arrivalTime);
+    });
+  }
+  console.log(trains);
   res.send(trains);
 });
 
