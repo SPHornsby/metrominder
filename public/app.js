@@ -189,6 +189,7 @@ var getTrains = function(query, callback) {
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
+      console.log(parsed);
       if (parsed.length > 0) {
         callback(JSON.parse(xhr.responseText));
       } else {
@@ -262,6 +263,7 @@ $("#route").on("change", function(e) {
   getTrains(query, trainsSelector);
 });
 $("#trains").on("change", function(e) {
+  console.log(e.target.value);
   var train = e.target.value;
   var query = `/search?train=${train}`;
   getTrains(query, stationsSelector);
