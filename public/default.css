@@ -141,5 +141,8 @@ label {
   }
 }
 #main, .app {
-  padding:0;
+  padding: 0;
+}
+.zero-margin {
+  margin-right: 0;
 }

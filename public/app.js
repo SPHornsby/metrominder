@@ -1,6 +1,6 @@
 var buildTrainResult = function(resultObject) {
   var jBlock = $("<div>")
-    .addClass("row station-row")
+    .addClass("row station-row zero-margin")
     .attr("data-station", resultObject.station);
 
   var jTrain = $("<div>")
