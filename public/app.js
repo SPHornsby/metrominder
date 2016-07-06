@@ -92,9 +92,9 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   }
   var results = $("<div>").addClass("col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
-      It is a ${resultObject.duration} minute drive to get from ${originString} to the station.
+      It is a ${resultObject.duration} minute drive to get to the station.
       You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
-      The train arrives to this station at ${timeAtStation}.`).append(result);
+      The train arrives to this station at ${timeAtStation}. `).append(result);
   $(row).append(results);
 };
 var getMyLocation = function() {
@@ -184,6 +184,7 @@ var getTrains = function(query, callback) {
 
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
+  console.log(query);
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
@@ -263,7 +264,6 @@ $("#route").on("change", function(e) {
   getTrains(query, trainsSelector);
 });
 $("#trains").on("change", function(e) {
-  console.log(e.target.value);
   var train = e.target.value;
   var query = `/search?train=${train}`;
   getTrains(query, stationsSelector);
@@ -282,7 +282,6 @@ $(".search-close").on("click", function() {
 });
 $(".results").on("click", ".station-col", function(e) {
   var row = e.target.parentNode;
-  console.log(e.target.parentNode.childNodes[3].textContent);
   createDirectionRow(row);
 });
 $(".results").on("click", ".direction-button", function(e) {
@@ -304,6 +303,6 @@ $(function(){
   getTrains("/train?route=all", trainsSelector);
   $(".search-area").hide();
   //initialResults();
-  getMyLocation();
+  //getMyLocation();
   //initMap();
 });

@@ -82,6 +82,8 @@ form {
   background-color: #e6e6e6;
 }
 .direction-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   background-color: #555;
