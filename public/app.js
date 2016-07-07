@@ -264,6 +264,7 @@ $(".train-search").on("click", function(e) {
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
   $(".results-header").show();
+  $(".results").show();
 });
 $("#route").on("change", function(e) {
   var route = e.target.value;
@@ -309,6 +310,7 @@ $(function(){
   getTrains("/search?route=None", trainsSelector);
   $(".search-area").hide();
   $(".results-header").hide();
+  $(".results").hide();
   //initialResults();
   //getMyLocation();
   //initMap();
