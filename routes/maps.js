@@ -37,7 +37,8 @@ var getDirections = function(query, callback) {
       if (result.status === "OK") {
 
         var importantData = result.routes[0].legs[0];
-        var justMinutes = importantData.duration.text.split(" ")[0];
+        var justSeconds = importantData.duration.value;
+        var justMinutes = Math.floor(justSeconds/60);
         var returnObject = {distance: importantData.distance.text, duration: justMinutes};
       } else {
         returnObject = "SOMETHING";

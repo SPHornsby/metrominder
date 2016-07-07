@@ -72,6 +72,7 @@ var createDirectionRow = function(row) {
 
 };
 var reportResults = function(resultObject, originString, timeAtStation) {
+  console.log(resultObject);
   var row = $(".direction-row");
   $(row).empty();
   var now = moment();
@@ -84,7 +85,9 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
   var arrivalTime = todayDate + " " + timeAtStation;
   var then = now.add(parseInt(resultObject.duration, 10), "m");
+
   var thenObject = then.toObject();
+
   if (thenObject.minutes <= 9) {
     thenObject.minutes = "0" + thenObject.minutes;
   }
@@ -105,6 +108,9 @@ var reportResults = function(resultObject, originString, timeAtStation) {
       It is a ${resultObject.duration} minute drive to get to the station.
       You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
       The train arrives to this station at ${timeAtStation}. `);
+  if (parseInt(resultObject.duration, 10) > 720) {
+    $(results).text("You are more than 12 hours away from the station.");
+  }
   $(row).append(result, results);
 };
 var padDates = function(datePiece) {

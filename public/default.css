@@ -129,6 +129,12 @@ label {
   top: 50%;
   transform: translateY(44%) translateX(-30%);
 }
+.station-row {
+  cursor: pointer;
+}
+.station-row:hover{
+  background-color: white;
+}
 .station-col {
   padding-left: 10%;
 }
@@ -161,4 +167,6 @@ label {
 .welcome {
   font-family: "Montserrat", Arial, sans-serif;
   color: black;
+  margin-left: 5%;
+  margin-right: 5%;
 }
