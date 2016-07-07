@@ -42,7 +42,7 @@ search.get("/", function(req, res) {
       var uniqueTrains = _.uniq(trainNumbers);
       trains = _.map(uniqueTrains, function(item) {
         return {train: item};
-      })
+      });
     } else {
       trains = trains.filter(train => train.route === route );
     }

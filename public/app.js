@@ -37,7 +37,7 @@ var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
   var timeAtStation = row.childNodes[3].textContent;
   //TODO start caching api calls, at least for a few minutes.
-  getLatLong(station, function(response) {
+  getLatLong(station, function() {
     //$(row).toggleClass("selected");
     $(".map-row").remove();
     $(".direction-row").remove();
@@ -97,8 +97,9 @@ var reportResults = function(resultObject, originString, timeAtStation) {
     result.text("You will not make it.");
     row.addClass("too-late");
   }
-  var smallResult = $("<div>").addClass("visible-xs-block col-xs-8 xol-xs-offset-2")
-  .text(``).append(result);
+  $("<div>").addClass("visible-xs-block col-xs-8 xol-xs-offset-2")
+    .text("")
+    .append(result);
   var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
     .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
       It is a ${resultObject.duration} minute drive to get to the station.
@@ -113,7 +114,7 @@ var padDates = function(datePiece) {
     stringPiece = "0".concat(stringPiece);
   }
   return stringPiece;
-}
+};
 var getMyLocation = function() {
   if (!navigator.geolocation) {
     console.log("Geolocation not supported");
@@ -131,12 +132,6 @@ var getMyLocation = function() {
   navigator.geolocation.getCurrentPosition(success, error);
   console.log("locating...");
 };
-var initMap = function() {
-  map = new google.maps.Map(document.getElementById("gMap"), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 8
-  });
-}
 var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
@@ -183,19 +178,19 @@ var display = function getRouteOnly(query) {
     }
   });
 };
-var initialResults = function() {
-  var xhr= new XMLHttpRequest();
-  xhr.open("GET", "/search");
-  xhr.send();
-  xhr.addEventListener("load", function() {
-    if (xhr.responseText) {
-      var response = JSON.parse(xhr.responseText);
-      buildAll(response);
-    } else {
-      console.log("No response");
-    }
-  });
-};
+// var initialResults = function() {
+//   var xhr= new XMLHttpRequest();
+//   xhr.open("GET", "/search");
+//   xhr.send();
+//   xhr.addEventListener("load", function() {
+//     if (xhr.responseText) {
+//       var response = JSON.parse(xhr.responseText);
+//       buildAll(response);
+//     } else {
+//       console.log("No response");
+//     }
+//   });
+// };
 var getTrains = function(query, callback) {
 
   var xhr = new XMLHttpRequest();
@@ -217,7 +212,6 @@ var getTrains = function(query, callback) {
     }
   });
 };
-//TODO make getTrains and trainsSelector generic so they can work on trains and stations selects
 var trainsSelector = function(trainOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#trains");
@@ -227,9 +221,7 @@ var trainsSelector = function(trainOptions) {
   });
   selector.empty().append(options.join(""));
 };
-var getStations = function(query) {
 
-};
 var stationsSelector = function(stationOptions) {
   var options = ["<option>None</option>"];
   var selector = $("#stations");
@@ -238,7 +230,6 @@ var stationsSelector = function(stationOptions) {
   });
   selector.empty().append(options.join(""));
 };
-
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
   var route = form[0].value;
@@ -301,11 +292,9 @@ $(".results").on("click", ".direction-button", function(e) {
   var timeAtStation = e.target.attributes["data-time"].value;
   //var originString = "33.8989121,-117.9914261";
   var originString = e.target.form[0].value;
-
   getLatLong(station, function(response) {
     getResults(response, originString, timeAtStation);
   });
-
 });
 $(".geolocate").on("click", function() {
   getMyLocation();

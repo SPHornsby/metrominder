@@ -13,6 +13,6 @@ module.exports = {
     {name: "Laguna Nigel", latLong: "33.553902,-117.6771917"},
     {name: "SJC", latLong: "33.5010215,-117.6661276"},
     {name: "San Clemente", latLong: "33.4321413,-117.6351529"},
-    {name: "Oceanside", latLong: "33.1929327,-117.3813991"},
+    {name: "Oceanside", latLong: "33.1929327,-117.3813991"}
   ]
-}
+};
