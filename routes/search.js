@@ -20,7 +20,15 @@ search.get("/", function(req, res) {
     trains = trains.filter(function(train) {
       var now = moment();
       var nowObject = now.toObject();
-      var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
+      var todayMonth = (nowObject.months+1).toString(10);
+      if (todayMonth.length === 1) {
+        todayMonth = "0" + todayMonth;
+      }
+      var todayDay = (nowObject.date).toString(10);
+      if (todayDay.length === 1) {
+        todayDay = "0" + todayDay;
+      }
+      var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
       var arrivalTime = todayDate + " " + train.actualTime;
       return now.isBefore(arrivalTime);
     });

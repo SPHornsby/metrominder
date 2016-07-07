@@ -79,7 +79,9 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   if (nowObject.minutes <= 9) {
     nowObject.minutes = "0" + nowObject.minutes;
   }
-  var todayDate = `${nowObject.years}-${nowObject.months+1}-${nowObject.date}`;
+  var todayMonth = padDates(nowObject.months+1);
+  var todayDay = padDates(nowObject.date);
+  var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
   var arrivalTime = todayDate + " " + timeAtStation;
   var then = now.add(parseInt(resultObject.duration, 10), "m");
   var thenObject = then.toObject();
@@ -104,6 +106,14 @@ var reportResults = function(resultObject, originString, timeAtStation) {
       The train arrives to this station at ${timeAtStation}. `);
   $(row).append(result, results);
 };
+var padDates = function(datePiece) {
+  var stringPiece = datePiece.toString(10);
+
+  if (stringPiece.length === 1) {
+    stringPiece = "0".concat(stringPiece);
+  }
+  return stringPiece;
+}
 var getMyLocation = function() {
   if (!navigator.geolocation) {
     console.log("Geolocation not supported");
@@ -196,11 +206,11 @@ var getTrains = function(query, callback) {
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
-      console.log(parsed);
+
       if (parsed.length > 0) {
         callback(JSON.parse(xhr.responseText));
       } else {
-        console.log(parsed);
+        console.log("Empty response");
       }
     } else {
       console.log("No response");
@@ -254,10 +264,9 @@ $(".train-search").on("click", function(e) {
     query = query + `station=${station}`;
   }
   display(query);
-  // $(".search-bar").toggleClass("hidden");
-  // $(".search-area").toggleClass("hidden");
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
+  $(".results-header").show();
 });
 $("#route").on("change", function(e) {
   var route = e.target.value;
@@ -274,6 +283,7 @@ $("#show-search").on("click", function() {
   //$(".search-area").toggleClass("hidden");
   $(".search-area").slideDown(200);
   $(".search-bar").slideUp(200);
+  $(".welcome").hide();
 });
 $(".search-close").on("click", function() {
   // $(".search-bar").toggleClass("hidden");
@@ -303,6 +313,7 @@ $(".geolocate").on("click", function() {
 $(function(){
   getTrains("/search?route=None", trainsSelector);
   $(".search-area").hide();
+  $(".results-header").hide();
   //initialResults();
   //getMyLocation();
   //initMap();
