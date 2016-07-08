@@ -1,18 +1,19 @@
 var search = require("express").Router();
 var schedule = require("../data/schedule").data;
-var time = require("../time.js");
+//var time = require("../time.js");
 var moment = require("moment");
 var _ = require("underscore");
 search.get("/", function(req, res) {
   var route = req.query.route,
     station = req.query.station,
     trainNumber = req.query.train,
-    timeCheck = true,
+    timeCheck = false,
     trains = schedule;
 
   trains = trains.map((train) => {
     return train.stops.map((stop) => {
-      return {train: train.train, route: train.route, status: time.convert(train.variance).minutes, station: stop.name, time: time.hasTime(stop.time), actualTime:time.hasTime(time.add(stop.time, train.variance))};
+      var momentTime = moment(stop.time).utcOffset(-7);
+      return {train: train.train, route: train.route, status: train.variance/60000, station: stop.name, time: stop.time, actualTime:momentTime.add(train.variance, "ms")};
     });
   }).reduce((a,b) => a.concat(b));
 
@@ -46,7 +47,6 @@ search.get("/", function(req, res) {
     } else {
       trains = trains.filter(train => train.route === route );
     }
-
   }
 
   if (station !== undefined) {

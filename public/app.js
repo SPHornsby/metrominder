@@ -11,10 +11,20 @@ var buildTrainResult = function(resultObject) {
     .text(resultObject.station);
   var jTime = $("<div>")
     .addClass("hidden-xs col-sm-3 station-col")
-    .text(resultObject.time);
+    .text( moment(resultObject.time).format("h:mm") );
+
+    
+  if (resultObject.time.hours > 12) {
+    $(jTime).addClass("bold");
+  }
+  var momentActual = moment(resultObject.actualTime);
+  var actualObject = momentActual.toObject();
   var jActual = $("<div>")
     .addClass("col-xs-2 station-col")
-    .text(resultObject.actualTime);
+    .text(momentActual.format("h:mm"));
+  if (actualObject.hours > 12) {
+    $(jActual).addClass("bold");
+  }
   var jStatus = $("<div>")
     .addClass("col-xs-2 station-col delay-col")
     .text(resultObject.status);
