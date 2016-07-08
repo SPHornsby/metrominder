@@ -7,7 +7,7 @@ search.get("/", function(req, res) {
   var route = req.query.route,
     station = req.query.station,
     trainNumber = req.query.train,
-    timeCheck = false,
+    timeCheck = true,
     trains = schedule;
 
   trains = trains.map((train) => {
@@ -30,7 +30,7 @@ search.get("/", function(req, res) {
         todayDay = "0" + todayDay;
       }
       var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
-      var arrivalTime = todayDate + " " + train.actualTime;
+      var arrivalTime = train.actualTime;
       return now.isBefore(arrivalTime);
     });
 
