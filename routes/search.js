@@ -36,7 +36,7 @@ search.get("/", function(req, res) {
 
   }
   if (route !== undefined) {
-    if (route === "None") {
+    if (route === "All") {
       var trainNumbers = _.map(trains, function(item) {
         return item.train;
       });
@@ -56,7 +56,7 @@ search.get("/", function(req, res) {
 
   if (trainNumber !== undefined) {
 
-    if (trainNumber === "None") {
+    if (trainNumber === "All") {
       var stations = _.map(trains, function (item) {
         return item.station;
       });
