@@ -11,10 +11,20 @@ var buildTrainResult = function(resultObject) {
     .text(resultObject.station);
   var jTime = $("<div>")
     .addClass("hidden-xs col-sm-3 station-col")
-    .text(resultObject.time);
+    .text( moment(resultObject.time).format("h:mm") );
+
+
+  if (resultObject.time.hours > 12) {
+    $(jTime).addClass("bold");
+  }
+  var momentActual = moment(resultObject.actualTime);
+  var actualObject = momentActual.toObject();
   var jActual = $("<div>")
     .addClass("col-xs-2 station-col")
-    .text(resultObject.actualTime);
+    .text(momentActual.format("h:mm"));
+  if (actualObject.hours > 12) {
+    $(jActual).addClass("bold");
+  }
   var jStatus = $("<div>")
     .addClass("col-xs-2 station-col delay-col")
     .text(resultObject.status);
@@ -219,7 +229,7 @@ var getTrains = function(query, callback) {
   });
 };
 var trainsSelector = function(trainOptions) {
-  var options = ["<option>None</option>"];
+  var options = ["<option>All</option>"];
   var selector = $("#trains");
   trainOptions.forEach(function(train) {
     //train.train
@@ -229,7 +239,7 @@ var trainsSelector = function(trainOptions) {
 };
 
 var stationsSelector = function(stationOptions) {
-  var options = ["<option>None</option>"];
+  var options = ["<option>All</option>"];
   var selector = $("#stations");
   stationOptions.forEach(function(station) {
     options.push(`<option>${station.station}</option>`);
@@ -242,19 +252,19 @@ $(".train-search").on("click", function(e) {
   var train = form[1].value;
   var station = form[2].value;
   var query = "/search?";
-  if (route !== "None") {
+  if (route !== "All") {
     if (query.slice(-1) !== "?") {
       query = query +"&";
     }
     query = query + `route=${route}`;
   }
-  if (train !== "None") {
+  if (train !== "All") {
     if (query.slice(-1) !== "?") {
       query = query +"&";
     }
     query = query + `train=${train}`;
   }
-  if (station !== "None") {
+  if (station !== "All") {
     if (query.slice(-1) !== "?") {
       query = query +"&";
     }
@@ -307,7 +317,7 @@ $(".geolocate").on("click", function() {
   getMyLocation();
 });
 $(function(){
-  getTrains("/search?route=None", trainsSelector);
+  getTrains("/search?route=All", trainsSelector);
   $(".search-area").hide();
   $(".results-header").hide();
   $(".results").hide();
