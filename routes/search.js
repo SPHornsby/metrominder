@@ -1,7 +1,7 @@
 var search = require("express").Router();
 var schedule = require("../data/schedule").data;
 //var time = require("../time.js");
-var moment = require("moment");
+var moment = require("moment-timezone");
 var _ = require("underscore");
 search.get("/", function(req, res) {
   var route = req.query.route,
@@ -19,17 +19,8 @@ search.get("/", function(req, res) {
 
   if (timeCheck) {
     trains = trains.filter(function(train) {
-      var now = moment();
-      var nowObject = now.toObject();
-      var todayMonth = (nowObject.months+1).toString(10);
-      if (todayMonth.length === 1) {
-        todayMonth = "0" + todayMonth;
-      }
-      var todayDay = (nowObject.date).toString(10);
-      if (todayDay.length === 1) {
-        todayDay = "0" + todayDay;
-      }
-      var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
+      var now = moment.tz();
+      var adjusted = now.tz("America/Los_Angeles");
       var arrivalTime = train.actualTime;
       return now.isBefore(arrivalTime);
     });
