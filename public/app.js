@@ -1,7 +1,8 @@
 var buildTrainResult = function(resultObject) {
   var jBlock = $("<div>")
     .addClass("row station-row zero-margin")
-    .attr("data-station", resultObject.station);
+    .attr("data-station", resultObject.station)
+    .attr("data-arrival", resultObject.actualTime);
 
   var jTrain = $("<div>")
     .addClass("col-xs-2 station-col").
@@ -45,7 +46,10 @@ var buildAll = function(fullObject) {
 };
 var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
+  var arrival = $(row).attr("data-arrival");
+
   var timeAtStation = row.childNodes[3].textContent;
+
   //TODO start caching api calls, at least for a few minutes.
   getLatLong(station, function() {
     //$(row).toggleClass("selected");
@@ -68,7 +72,7 @@ var createDirectionRow = function(row) {
     var directionButton = $("<button>").addClass("btn btn-info direction-button")
       .text("Will I Make It?")
       .attr("data-station", station)
-      .attr("data-time", timeAtStation);
+      .attr("data-time", arrival);
     $(directionForm).append(directionInput, directionButton);
     //$(directionSelect).append(directionOption);
     $(directionContents).append(directionForm);
@@ -82,10 +86,11 @@ var createDirectionRow = function(row) {
 
 };
 var reportResults = function(resultObject, originString, timeAtStation) {
-  console.log(resultObject);
+
   var row = $(".direction-row");
   $(row).empty();
   var now = moment();
+
   var nowObject = now.toObject();
   if (nowObject.minutes <= 9) {
     nowObject.minutes = "0" + nowObject.minutes;
@@ -93,8 +98,8 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   var todayMonth = padDates(nowObject.months+1);
   var todayDay = padDates(nowObject.date);
   var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
-  var arrivalTime = todayDate + " " + timeAtStation;
-  var then = now.add(parseInt(resultObject.duration, 10), "m");
+  var arrivalTime = moment(timeAtStation).format("h:mm a");
+  var then = moment().add(parseInt(resultObject.duration, 10), "m");
 
   var thenObject = then.toObject();
 
@@ -103,7 +108,7 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   }
   var result=$("<span>");
 
-  if (then.isBefore(arrivalTime)) {
+  if (then.isBefore(timeAtStation)) {
     result.text("You will make it.");
     row.addClass("safe");
   } else {
@@ -114,10 +119,10 @@ var reportResults = function(resultObject, originString, timeAtStation) {
     .text("")
     .append(result);
   var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
-    .text(`The time is now ${nowObject.hours}:${nowObject.minutes}.
+    .text(`The time is now ${now.format("h:mm a")}.
       It is a ${resultObject.duration} minute drive to get to the station.
-      You will arrive at this station at ${thenObject.hours}:${thenObject.minutes}.
-      The train arrives to this station at ${timeAtStation}. `);
+      You will arrive at this station at ${then.format("h:mm a")}.
+      The train arrives to this station at ${arrivalTime}. `);
   if (parseInt(resultObject.duration, 10) > 720) {
     $(results).text("You are more than 12 hours away from the station.");
   }
@@ -164,6 +169,7 @@ var getLatLong = function(station, callback) {
   });
 };
 var getResults = function(destination, originString, timeAtStation) {
+  var arrival = moment(timeAtStation);
 
   var origin = originString.split(" ").join("+");
   //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
@@ -188,6 +194,7 @@ var display = function getRouteOnly(query) {
   xhr.addEventListener("load", function() {
 
     if (xhr.responseText) {
+    
       buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
