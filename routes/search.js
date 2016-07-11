@@ -1,15 +1,14 @@
 var search = require("express").Router();
 var schedule = require("../data/schedule").data;
-//var time = require("../time.js");
 var moment = require("moment-timezone");
 var _ = require("underscore");
-search.get("/", function(req, res) {
-  var route = req.query.route,
-    station = req.query.station,
-    trainNumber = req.query.train,
-    timeCheck = true,
-    trains = schedule;
 
+search.get("/", function(req, res) {
+  var route = req.query.route;
+  var station = req.query.station;
+  var trainNumber = req.query.train;
+  var timeCheck = true;
+  var trains = schedule;
   trains = trains.map((train) => {
     return train.stops.map((stop) => {
       var momentTime = moment(stop.time).utcOffset(-7);
@@ -24,7 +23,6 @@ search.get("/", function(req, res) {
       var arrivalTime = train.actualTime;
       return now.isBefore(arrivalTime);
     });
-
   }
   if (route !== undefined) {
     if (route === "All") {
@@ -39,14 +37,10 @@ search.get("/", function(req, res) {
       trains = trains.filter(train => train.route === route );
     }
   }
-
   if (station !== undefined) {
     trains = trains.filter(train => train.station === station);
-
   }
-
   if (trainNumber !== undefined) {
-
     if (trainNumber === "All") {
       var stations = _.map(trains, function (item) {
         return item.station;
@@ -55,19 +49,13 @@ search.get("/", function(req, res) {
       trains = _.map(uniqueStations, function(item) {
         return {station: item};
       });
-
     } else {
-
       trains = trains.filter(train => {
-
         return train.train == trainNumber;
       });
-
     }
-
   }
   res.send(trains);
 });
-
 
 module.exports = search;

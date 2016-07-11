@@ -3,7 +3,6 @@ var buildTrainResult = function(resultObject) {
     .addClass("row station-row zero-margin")
     .attr("data-station", resultObject.station)
     .attr("data-arrival", resultObject.actualTime);
-
   var jTrain = $("<div>")
     .addClass("col-xs-2 station-col").
     text(resultObject.train);
@@ -13,8 +12,6 @@ var buildTrainResult = function(resultObject) {
   var jTime = $("<div>")
     .addClass("hidden-xs col-sm-3 station-col")
     .text( moment(resultObject.time).format("h:mm") );
-
-
   if (resultObject.time.hours > 12) {
     $(jTime).addClass("bold");
   }
@@ -35,6 +32,7 @@ var buildTrainResult = function(resultObject) {
   jBlock.append(jTrain, jStation, jTime, jActual, jStatus);
   $(".results").append(jBlock);
 };
+
 var buildAll = function(fullObject) {
   $(".results").empty();
   if (fullObject.length === 0) {
@@ -44,53 +42,38 @@ var buildAll = function(fullObject) {
     buildTrainResult(item);
   });
 };
+
 var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
   var arrival = $(row).attr("data-arrival");
-
   var timeAtStation = row.childNodes[3].textContent;
-
-  //TODO start caching api calls, at least for a few minutes.
   getLatLong(station, function() {
-    //$(row).toggleClass("selected");
     $(".map-row").remove();
     $(".direction-row").remove();
     var containerRow = $("<div>").addClass("col-xs-10 col-xs-offset-1");
-    // var mapRow = $("<div>").addClass("row map-row");
     var directionRow = $("<div>").addClass("row direction-row");
-    // var map = $("<img>").addClass("map")
-    //   .attr("src", `https://maps.googleapis.com/maps/api/staticmap?center=${response}&zoom=16&size=300x300&sensor=false`);
     var directionContents = $("<div>").addClass(" col-xs-10 col-xs-offset-1");
-
     var directionForm = $("<form>").addClass("form col-xs-12");
     var directionInput = $("<input>").addClass("form-control col-xs-10")
       .attr("placeholder", "4590 MacArthur Blvd, Newport Beach, CA 92660")
       .attr("width", "150")
       .val("4590 MacArthur Blvd, Newport Beach, CA 92660");
-    // var directionSelect = $("<select>").addClass("form-control");
-    // var directionOption = $("<option>").text("Fake Location")
     var directionButton = $("<button>").addClass("btn btn-info direction-button")
       .text("Will I Make It?")
       .attr("data-station", station)
       .attr("data-time", arrival);
     $(directionForm).append(directionInput, directionButton);
-    //$(directionSelect).append(directionOption);
     $(directionContents).append(directionForm);
     $(directionRow).append(directionContents);
-    //$(mapRow).append(map);
-    //$(containerRow).append(mapRow, directionRow);
     $(containerRow).append(directionRow);
     $(row).append(containerRow);
   });
-
-
 };
-var reportResults = function(resultObject, originString, timeAtStation) {
 
+var reportResults = function(resultObject, originString, timeAtStation) {
   var row = $(".direction-row");
   $(row).empty();
   var now = moment();
-
   var nowObject = now.toObject();
   if (nowObject.minutes <= 9) {
     nowObject.minutes = "0" + nowObject.minutes;
@@ -100,14 +83,11 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
   var arrivalTime = moment(timeAtStation).format("h:mm a");
   var then = moment().add(parseInt(resultObject.duration, 10), "m");
-
   var thenObject = then.toObject();
-
   if (thenObject.minutes <= 9) {
     thenObject.minutes = "0" + thenObject.minutes;
   }
   var result=$("<span>");
-
   if (then.isBefore(timeAtStation)) {
     result.text("You will make it.");
     row.addClass("safe");
@@ -128,6 +108,7 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   }
   $(row).append(result, results);
 };
+
 var padDates = function(datePiece) {
   var stringPiece = datePiece.toString(10);
 
@@ -136,6 +117,7 @@ var padDates = function(datePiece) {
   }
   return stringPiece;
 };
+
 var getMyLocation = function() {
   if (!navigator.geolocation) {
     console.log("Geolocation not supported");
@@ -153,6 +135,7 @@ var getMyLocation = function() {
   navigator.geolocation.getCurrentPosition(success, error);
   console.log("locating...");
 };
+
 var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
@@ -168,63 +151,45 @@ var getLatLong = function(station, callback) {
     }
   });
 };
+
 var getResults = function(destination, originString, timeAtStation) {
   var arrival = moment(timeAtStation);
-
   var origin = originString.split(" ").join("+");
-  //var query = "origin=33.668506,-117.8657897&destination=33.7082557,-117.8181739";
   var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/maps?" + query);
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-
       reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
     } else {
       console.log("No results");
     }
   });
 };
+
 var display = function getRouteOnly(query) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
-
     if (xhr.responseText) {
-
       buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
     }
   });
 };
-// var initialResults = function() {
-//   var xhr= new XMLHttpRequest();
-//   xhr.open("GET", "/search");
-//   xhr.send();
-//   xhr.addEventListener("load", function() {
-//     if (xhr.responseText) {
-//       var response = JSON.parse(xhr.responseText);
-//       buildAll(response);
-//     } else {
-//       console.log("No response");
-//     }
-//   });
-// };
-var getTrains = function(query, callback) {
 
+var getTrains = function(query, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", query);
-
   xhr.setRequestHeader("Content-type", "text/html");
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
       var parsed = JSON.parse(xhr.responseText);
-
       if (parsed.length > 0) {
         callback(JSON.parse(xhr.responseText));
       } else {
@@ -235,11 +200,11 @@ var getTrains = function(query, callback) {
     }
   });
 };
+
 var trainsSelector = function(trainOptions) {
   var options = ["<option>All</option>"];
   var selector = $("#trains");
   trainOptions.forEach(function(train) {
-    //train.train
     options.push(`<option>${train.train}</option>`);
   });
   selector.empty().append(options.join(""));
@@ -253,6 +218,8 @@ var stationsSelector = function(stationOptions) {
   });
   selector.empty().append(options.join(""));
 };
+
+//Event Handlers
 $(".train-search").on("click", function(e) {
   var form = e.target.form;
   var route = form[0].value;
@@ -283,52 +250,52 @@ $(".train-search").on("click", function(e) {
   $(".results-header").show();
   $(".results").show();
 });
+
 $("#route").on("change", function(e) {
   var route = e.target.value;
   var query = `/train?route=${route}`;
   getTrains(query, trainsSelector);
 });
+
 $("#trains").on("change", function(e) {
   var train = e.target.value;
   var query = `/search?train=${train}`;
   getTrains(query, stationsSelector);
 });
+
 $("#show-search").on("click", function() {
-  //$(".search-bar").toggleClass("hidden");
-  //$(".search-area").toggleClass("hidden");
   $(".search-area").slideDown(200);
   $(".search-bar").slideUp(200);
   $(".welcome").hide();
 });
+
 $(".search-close").on("click", function() {
-  // $(".search-bar").toggleClass("hidden");
-  // $(".search-area").toggleClass("hidden");
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
 });
+
 $(".results").on("click", ".station-col", function(e) {
   var row = e.target.parentNode;
   createDirectionRow(row);
 });
+
 $(".results").on("click", ".direction-button", function(e) {
   e.preventDefault();
   var station = e.target.attributes["data-station"].value;
   var timeAtStation = e.target.attributes["data-time"].value;
-  //var originString = "33.8989121,-117.9914261";
   var originString = e.target.form[0].value;
   getLatLong(station, function(response) {
     getResults(response, originString, timeAtStation);
   });
 });
+
 $(".geolocate").on("click", function() {
   getMyLocation();
 });
+
 $(function(){
   getTrains("/search?route=All", trainsSelector);
   $(".search-area").hide();
   $(".results-header").hide();
   $(".results").hide();
-  //initialResults();
-  //getMyLocation();
-  //initMap();
 });

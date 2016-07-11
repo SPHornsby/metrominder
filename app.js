@@ -12,5 +12,4 @@ app.use("/search", search);
 app.use("/train", train);
 app.use("/maps", maps);
 
-
 app.listen(app.get("port"), () => console.log(`Listening on port:${app.get("port")}`));

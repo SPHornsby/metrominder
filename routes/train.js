@@ -3,14 +3,16 @@ var schedule = require("../data/schedule").data;
 
 train.get("/", function(req, res) {
   var route = req.query.route,
-    trains=schedule;
-  if (route === "None") {
+  var trains;
+  if (route === "All") {
+    trains = schedule
   } else {
     console.log("else");
     trains = schedule.filter(train => train.route === route);
   }
   res.send(trains);
 });
+
 train.put("/:train/:delay", function(req, res) {
   var trainNumber= req.params.train;
   var delay = req.params.delay;
