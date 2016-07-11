@@ -2,10 +2,10 @@ var train = require("express").Router();
 var schedule = require("../data/schedule").data;
 
 train.get("/", function(req, res) {
-  var route = req.query.route,
+  var route = req.query.route;
   var trains;
   if (route === "All") {
-    trains = schedule
+    trains = schedule;
   } else {
     console.log("else");
     trains = schedule.filter(train => train.route === route);
