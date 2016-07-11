@@ -1,29 +1,15 @@
 var search = require("express").Router();
-var schedule = require("../data/schedule").data;
-var moment = require("moment-timezone");
+
 var _ = require("underscore");
 
 search.get("/", function(req, res) {
   var route = req.query.route;
   var station = req.query.station;
   var trainNumber = req.query.train;
-  var timeCheck = true;
-  var trains = schedule;
-  trains = trains.map((train) => {
-    return train.stops.map((stop) => {
-      var momentTime = moment(stop.time).utcOffset(-7);
-      return {train: train.train, route: train.route, status: train.variance/60000, station: stop.name, time: stop.time, actualTime:momentTime.add(train.variance, "ms")};
-    });
-  }).reduce((a,b) => a.concat(b));
 
-  if (timeCheck) {
-    trains = trains.filter(function(train) {
-      var now = moment.tz();
-      var adjusted = now.tz("America/Los_Angeles");
-      var arrivalTime = train.actualTime;
-      return now.isBefore(arrivalTime);
-    });
-  }
+  var trains = req.trains;
+
+
   if (route !== undefined) {
     if (route === "All") {
       var trainNumbers = _.map(trains, function(item) {

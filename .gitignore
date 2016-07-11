@@ -42,3 +42,6 @@ jspm_packages
 ENV.js
 .gitignore
 .env
+
+# CSSComb
+.csscomb.json

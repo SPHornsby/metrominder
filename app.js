@@ -1,13 +1,14 @@
 var express = require("express");
 var app = express();
 var train = require("./routes/train.js");
+var preScreen = require("./routes/pre-screen.js");
 var search = require("./routes/search.js");
 var maps = require("./routes/maps.js");
 
 app.set("port", (process.env.PORT || 8000));
 
 app.use(express.static("./public"));
-
+app.use("/search", preScreen)
 app.use("/search", search);
 app.use("/train", train);
 app.use("/maps", maps);
