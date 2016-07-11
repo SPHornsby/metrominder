@@ -2,7 +2,7 @@
   "name": "metrominder",
   "version": "1.0.0",
   "description": "An app for commuters who want to check if their trains are running on schedule.",
-  "main": "server.js",
+  "main": "app.js",
   "eslintConfig": {
     "env": {
       "browser": true,
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",

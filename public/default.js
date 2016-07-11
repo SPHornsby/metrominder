@@ -194,7 +194,7 @@ var display = function getRouteOnly(query) {
   xhr.addEventListener("load", function() {
 
     if (xhr.responseText) {
-    
+
       buildAll(JSON.parse(xhr.responseText));
     } else {
       console.log("No response");
