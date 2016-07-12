@@ -1,21 +1,21 @@
-var buildTrainResult = function(resultObject) {
+var buildTrainResult = function(result) {
   var jBlock = $("<div>")
     .addClass("row station-row zero-margin")
-    .attr("data-station", resultObject.station)
-    .attr("data-arrival", resultObject.actualTime);
+    .attr("data-station", result.station)
+    .attr("data-arrival", result.actualTime);
   var jTrain = $("<div>")
     .addClass("col-xs-2 station-col").
-    text(resultObject.train);
+    text(result.train);
   var jStation = $("<div>")
     .addClass("col-xs-5 col-sm-3 station-col")
-    .text(resultObject.station);
+    .text(result.station);
   var jTime = $("<div>")
     .addClass("hidden-xs col-sm-3 station-col")
-    .text( moment(resultObject.time).format("h:mm") );
-  if (resultObject.time.hours > 12) {
+    .text( moment(result.time).format("h:mm") );
+  if (result.time.hours > 12) {
     $(jTime).addClass("bold");
   }
-  var momentActual = moment(resultObject.actualTime);
+  var momentActual = moment(result.actualTime);
   var actualObject = momentActual.toObject();
   var jActual = $("<div>")
     .addClass("col-xs-2 station-col")
@@ -25,8 +25,8 @@ var buildTrainResult = function(resultObject) {
   }
   var jStatus = $("<div>")
     .addClass("col-xs-2 station-col delay-col")
-    .text(resultObject.status);
-  if (resultObject.status > 0 ) {
+    .text(result.status);
+  if (result.status > 0 ) {
     jStatus.addClass("late");
   }
   jBlock.append(jTrain, jStation, jTime, jActual, jStatus);
@@ -46,7 +46,7 @@ var buildAll = function(fullObject) {
 var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
   var arrival = $(row).attr("data-arrival");
-  var timeAtStation = row.childNodes[3].textContent;
+  //var timeAtStation = row.childNodes[3].textContent;
   getLatLong(station, function() {
     $(".map-row").remove();
     $(".direction-row").remove();
@@ -70,7 +70,7 @@ var createDirectionRow = function(row) {
   });
 };
 
-var reportResults = function(resultObject, originString, timeAtStation) {
+var reportResults = function(result, timeAtStation) {
   var row = $(".direction-row");
   $(row).empty();
   var now = moment();
@@ -78,44 +78,44 @@ var reportResults = function(resultObject, originString, timeAtStation) {
   if (nowObject.minutes <= 9) {
     nowObject.minutes = "0" + nowObject.minutes;
   }
-  var todayMonth = padDates(nowObject.months+1);
-  var todayDay = padDates(nowObject.date);
+  var todayMonth = padDate(nowObject.months+1);
+  var todayDay = padDate(nowObject.date);
   var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
   var arrivalTime = moment(timeAtStation).format("h:mm a");
-  var then = moment().add(parseInt(resultObject.duration, 10), "m");
+  var then = moment().add(parseInt(result.duration, 10), "m");
   var thenObject = then.toObject();
   if (thenObject.minutes <= 9) {
     thenObject.minutes = "0" + thenObject.minutes;
   }
-  var result=$("<span>");
+  var theResult=$("<span>");
   if (then.isBefore(timeAtStation)) {
-    result.text("You will make it.");
+    theResult.text("You will make it.");
     row.addClass("safe");
   } else {
-    result.text("You will not make it.");
+    theResult.text("You will not make it.");
     row.addClass("too-late");
   }
   $("<div>").addClass("visible-xs-block col-xs-8 xol-xs-offset-2")
     .text("")
-    .append(result);
+    .append(theResult);
   var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
     .text(`The time is now ${now.format("h:mm a")}.
-      It is a ${resultObject.duration} minute drive to get to the station.
+      It is a ${result.duration} minute drive to get to the station.
       You will arrive at this station at ${then.format("h:mm a")}.
       The train arrives to this station at ${arrivalTime}. `);
-  if (parseInt(resultObject.duration, 10) > 720) {
+  if (parseInt(result.duration, 10) > 720) {
     $(results).text("You are more than 12 hours away from the station.");
   }
-  $(row).append(result, results);
+  $(row).append(theResult, results);
 };
 
-var padDates = function(datePiece) {
-  var stringPiece = datePiece.toString(10);
+var padDate = function(date) {
+  var dateString = date.toString(10);
 
-  if (stringPiece.length === 1) {
-    stringPiece = "0".concat(stringPiece);
+  if (dateString.length === 1) {
+    paddedDate = "0".concat(dateString);
   }
-  return stringPiece;
+  return paddedDate;
 };
 
 var getMyLocation = function() {
@@ -152,16 +152,16 @@ var getLatLong = function(station, callback) {
   });
 };
 
-var getResults = function(destination, originString, timeAtStation) {
+var getResults = function(destination, origin, timeAtStation) {
   var arrival = moment(timeAtStation);
-  var origin = originString.split(" ").join("+");
+  var origin = origin.split(" ").join("+");
   var query = `origin=${origin}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/maps?" + query);
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      reportResults(JSON.parse(xhr.responseText), originString, timeAtStation);
+      reportResults(JSON.parse(xhr.responseText), origin, timeAtStation);
     } else {
       console.log("No results");
     }
@@ -283,9 +283,9 @@ $(".results").on("click", ".direction-button", function(e) {
   e.preventDefault();
   var station = e.target.attributes["data-station"].value;
   var timeAtStation = e.target.attributes["data-time"].value;
-  var originString = e.target.form[0].value;
+  var origin = (e.target.form[0].value).split(" ").join("+");
   getLatLong(station, function(response) {
-    getResults(response, originString, timeAtStation);
+    getResults(response, origin, timeAtStation);
   });
 });
 
