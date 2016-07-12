@@ -4,15 +4,14 @@ var moment = require("moment-timezone");
 var preScreen = function (req, res, next) {
   req.trains = schedule.map((train) => {
     return train.stops.map((stop) => {
-      var momentTime = moment(stop.time);
-      return {train: train.train, route: train.route, status: train.variance/60000, station: stop.name, time: moment(stop.time), actualTime:momentTime.add(train.variance, "ms")};
+      var momentTime = moment.tz(stop.time, "America/Los_Angeles");
+      return {train: train.train, route: train.route, status: train.variance/60000, station: stop.name, time: momentTime, actualTime:momentTime.add(train.variance, "ms")};
     });
   }).reduce((a,b) => a.concat(b))
   .filter(function(train) {
-    var now = moment.tz();
-    var adjusted = now.tz("America/Los_Angeles");
+    var now = moment().tz("America/Los_Angeles");
     var arrivalTime = train.actualTime;
-    return adjusted.isBefore(arrivalTime);
+    return now.isBefore(arrivalTime);
   });
 
   next();
