@@ -2,6 +2,18 @@
 # metrominder
 An app for commuters who want to check if their trains are running on schedule.
 
+MetroMinder allows the user to see when trains will get to each stations, including any reported delays. They can then check the travel time between their location and the station to determine if they can make it to the station before their train departs.
+
+MetroMinder uses the **_Google Maps Directions API_** to calculate the trip duration.
+
+MetroMinder uses the following libraries:
+* **_Express_**
+* **_Moment Timezone_**
+* **_Underscore_**
+* **_Nodemon_**
+
+MetroMinder uses **_jQuery_** and **_Bootstrap_** on the front-end
+
 # Screenshots:
 
 ## Home Screen:
