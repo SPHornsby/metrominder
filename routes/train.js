@@ -7,7 +7,6 @@ train.get("/", function(req, res) {
   if (route === "All") {
     trains = schedule;
   } else {
-    console.log("else");
     trains = schedule.filter(train => train.route === route);
   }
   res.send(trains);
