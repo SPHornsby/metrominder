@@ -247,8 +247,7 @@ $(".train-search").on("click", function(e) {
   display(query);
   $(".search-area").slideUp(200);
   $(".search-bar").slideDown(200);
-  $(".results-header").show();
-  $(".results").show();
+  $(".results-header, .results, .results-prompt").show();
 });
 
 $("#route").on("change", function(e) {
@@ -266,7 +265,7 @@ $("#trains").on("change", function(e) {
 $("#show-search").on("click", function() {
   $(".search-area").slideDown(200);
   $(".search-bar").slideUp(200);
-  $(".welcome").hide();
+  $(".welcome, .results-prompt").hide();
 });
 
 $(".search-close").on("click", function() {
@@ -289,13 +288,7 @@ $(".results").on("click", ".direction-button", function(e) {
   });
 });
 
-$(".geolocate").on("click", function() {
-  getMyLocation();
-});
-
 $(function(){
   getTrains("/search?route=All", trainsSelector);
-  $(".search-area").hide();
-  $(".results-header").hide();
-  $(".results").hide();
+  $(".search-area, .results-header, .results, .results-prompt").hide();
 });
