@@ -1,36 +1,36 @@
 var buildTrainResult = function(result) {
-  var jBlock = $("<div>")
+  var block = $("<div>")
     .addClass("row station-row zero-margin")
     .attr("data-station", result.station)
     .attr("data-arrival", result.actualTime);
-  var jTrain = $("<div>")
+  var train = $("<div>")
     .addClass("col-xs-2 station-col").
     text(result.train);
-  var jStation = $("<div>")
+  var station = $("<div>")
     .addClass("col-xs-5 col-sm-3 station-col")
     .text(result.station);
-  var jTime = $("<div>")
+  var noon = moment().set({"hour": 11, "minute": 59, "second": 59});
+  var time = $("<div>")
     .addClass("hidden-xs col-sm-3 station-col")
     .text( moment(result.time).format("h:mm") );
-  if (result.time.hours > 12) {
-    $(jTime).addClass("bold");
+  if (moment(result.time).isAfter(noon)) {
+    $(time).addClass("bold");
   }
   var momentActual = moment(result.actualTime);
-  var actualObject = momentActual.toObject();
-  var jActual = $("<div>")
+  var actual = $("<div>")
     .addClass("col-xs-2 station-col")
     .text(momentActual.format("h:mm"));
-  if (actualObject.hours > 12) {
-    $(jActual).addClass("bold");
+  if (momentActual.isAfter(noon)) {
+    $(actual).addClass("bold");
   }
-  var jStatus = $("<div>")
+  var status = $("<div>")
     .addClass("col-xs-2 station-col delay-col")
     .text(result.status);
   if (result.status > 0 ) {
-    jStatus.addClass("late");
+    status.addClass("late");
   }
-  jBlock.append(jTrain, jStation, jTime, jActual, jStatus);
-  $(".results").append(jBlock);
+  block.append(train, station, time, actual, status);
+  $(".results").append(block);
 };
 
 var buildAll = function(fullObject) {
@@ -46,7 +46,6 @@ var buildAll = function(fullObject) {
 var createDirectionRow = function(row) {
   var station = $(row).attr("data-station");
   var arrival = $(row).attr("data-arrival");
-  //var timeAtStation = row.childNodes[3].textContent;
   getLatLong(station, function() {
     $(".map-row").remove();
     $(".direction-row").remove();
@@ -74,19 +73,8 @@ var reportResults = function(result, timeAtStation) {
   var row = $(".direction-row");
   $(row).empty();
   var now = moment();
-  var nowObject = now.toObject();
-  if (nowObject.minutes <= 9) {
-    nowObject.minutes = "0" + nowObject.minutes;
-  }
-  var todayMonth = padDate(nowObject.months+1);
-  var todayDay = padDate(nowObject.date);
-  var todayDate = `${nowObject.years}-${todayMonth}-${todayDay}`;
   var arrivalTime = moment(timeAtStation).format("h:mm a");
   var then = moment().add(parseInt(result.duration, 10), "m");
-  var thenObject = then.toObject();
-  if (thenObject.minutes <= 9) {
-    thenObject.minutes = "0" + thenObject.minutes;
-  }
   var theResult=$("<span>");
   if (then.isBefore(timeAtStation)) {
     theResult.text("You will make it.");
@@ -109,33 +97,6 @@ var reportResults = function(result, timeAtStation) {
   $(row).append(theResult, results);
 };
 
-var padDate = function(date) {
-  var dateString = date.toString(10);
-
-  if (dateString.length === 1) {
-    paddedDate = "0".concat(dateString);
-  }
-  return paddedDate;
-};
-
-var getMyLocation = function() {
-  if (!navigator.geolocation) {
-    console.log("Geolocation not supported");
-    return;
-  }
-  function success(position) {
-    var lat = position.coords.latitude;
-    var long = position.coords.longitude;
-    var location = `${lat},${long}`;
-    console.log(location);
-  }
-  function error() {
-    console.log("error");
-  }
-  navigator.geolocation.getCurrentPosition(success, error);
-  console.log("locating...");
-};
-
 var getLatLong = function(station, callback) {
   var query = `station=${station}`;
   var xhr = new XMLHttpRequest();
@@ -145,7 +106,6 @@ var getLatLong = function(station, callback) {
     if (xhr.responseText) {
       var response = JSON.parse(xhr.responseText)[0].latLong;
       callback(response);
-
     } else {
       console.log("No response");
     }
@@ -153,15 +113,13 @@ var getLatLong = function(station, callback) {
 };
 
 var getResults = function(destination, origin, timeAtStation) {
-  var arrival = moment(timeAtStation);
-  var origin = origin.split(" ").join("+");
-  var query = `origin=${origin}&destination=${destination}`;
+  var query = `origin=${origin.split(" ").join("+")}&destination=${destination}`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/maps?" + query);
   xhr.send();
   xhr.addEventListener("load", function() {
     if (xhr.responseText) {
-      reportResults(JSON.parse(xhr.responseText), origin, timeAtStation);
+      reportResults(JSON.parse(xhr.responseText), timeAtStation);
     } else {
       console.log("No results");
     }
