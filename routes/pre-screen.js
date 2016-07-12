@@ -12,7 +12,7 @@ var preScreen = function (req, res, next) {
     var now = moment.tz();
     var adjusted = now.tz("America/Los_Angeles");
     var arrivalTime = train.actualTime;
-    return now.isBefore(arrivalTime);
+    return adjusted.isBefore(arrivalTime);
   });
 
   next();
