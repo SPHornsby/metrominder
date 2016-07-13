@@ -1,6 +1,7 @@
 var maps = require("express").Router();
 var locations = require("../data/locations.js").data;
 var https = require("https");
+var request = require("request");
 
 maps.get("/station", function(req, res) {
   var query = req.query.station;
@@ -9,11 +10,47 @@ maps.get("/station", function(req, res) {
 });
 
 maps.get("/", function(req, res) {
+  console.log("hello");
   var query=req.query;
-  getDirections(query, function(data) {
-    res.status(200).send(data);
-  });
+  promiseDirections(query)
+    .then(function(data) {
+      res.send(data);
+    })
+    .catch(function(err) {
+      res.send(err)
+    })
+
+  // getDirections(query, function(data) {
+  //   res.status(200).send(data);
+  // });
 });
+
+var promiseDirections = function(query) {
+  return promise = new Promise(function (resolve, reject) {
+    //do the request
+    var origin = query.origin;
+    var destination = query.destination;
+    var key = process.env.GD_KEY;
+    var finalData="";
+    var smashedChunk="";
+    var url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
+    request(url, function(error, response, body) {
+      if(error) {
+        reject(error);
+      } else {
+        //chunk smashing
+        response.on("data", function(chunk) {
+          var textChunk = chunk.toString("utf8");
+          finalData = finalData + textChunk;
+          smashedChunk = smashedChunk + chunk;
+        });
+        response.on("end", function() {
+          resolve(JSON.parse(smashedChunk));
+        });
+      }
+    });
+  });
+}
 
 var getDirections = function(query, callback) {
   var origin = query.origin;
