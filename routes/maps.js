@@ -12,17 +12,17 @@ maps.get("/station", function(req, res) {
 maps.get("/", function(req, res) {
   console.log("hello");
   var query=req.query;
-  promiseDirections(query)
-    .then(function(data) {
-      res.send(data);
-    })
-    .catch(function(err) {
-      res.send(err)
-    })
+  // promiseDirections(query)
+  //   .then(function(data) {
+  //     res.send(data);
+  //   })
+  //   .catch(function(err) {
+  //     res.send(err)
+  //   })
 
-  // getDirections(query, function(data) {
-  //   res.status(200).send(data);
-  // });
+  getDirections(query, function(data) {
+    res.status(200).send(data);
+  });
 });
 
 var promiseDirections = function(query) {
@@ -34,6 +34,7 @@ var promiseDirections = function(query) {
     var finalData="";
     var smashedChunk="";
     var url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${key}`;
+
     request(url, function(error, response, body) {
       if(error) {
         reject(error);
