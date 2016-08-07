@@ -75,24 +75,16 @@ var reportResults = function(result, timeAtStation) {
   var now = moment();
   var arrivalTime = moment(timeAtStation).format("h:mm a");
   var then = moment().add(parseInt(result.duration, 10), "m");
-  var theResult=$("<span>");
+  var theResult=$("<div>");
   if (then.isBefore(timeAtStation)) {
-    theResult.text("You will make it.");
+    theResult.text(`It is a ${result.duration} minute drive to get to the station.
+      You will arrive at this station at ${then.format("h:mm a")}. You will make it.`);
     row.addClass("safe");
   } else {
-    theResult.text("You will not make it.");
+    theResult.text(`It is a ${result.duration} minute drive to get to the station.
+      You will arrive at this station at ${then.format("h:mm a")}. You will not make it.`);
     row.addClass("too-late");
   }
-  $("<div>").addClass("visible-xs-block col-xs-8 xol-xs-offset-2")
-    .text("")
-    .append(theResult);
-  var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
-    .text(`It is a ${result.duration} minute drive to get to the station.
-      You will arrive at this station at ${then.format("h:mm a")}.`);
-  if (parseInt(result.duration, 10) > 720) {
-    $(results).text("You are more than 12 hours away from the station.");
-  }
-  $(theResult).append(results);
   $(row).append(theResult);
 };
 
