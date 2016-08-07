@@ -87,14 +87,13 @@ var reportResults = function(result, timeAtStation) {
     .text("")
     .append(theResult);
   var results = $("<div>").addClass("hidden-xs col-xs-8 col-xs-offset-2")
-    .text(`The time is now ${now.format("h:mm a")}.
-      It is a ${result.duration} minute drive to get to the station.
-      You will arrive at this station at ${then.format("h:mm a")}.
-      The train arrives to this station at ${arrivalTime}. `);
+    .text(`It is a ${result.duration} minute drive to get to the station.
+      You will arrive at this station at ${then.format("h:mm a")}.`);
   if (parseInt(result.duration, 10) > 720) {
     $(results).text("You are more than 12 hours away from the station.");
   }
-  $(row).append(theResult, results);
+  $(theResult).append(results);
+  $(row).append(theResult);
 };
 
 var getLatLong = function(station, callback) {
