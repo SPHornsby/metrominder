@@ -153,3 +153,7 @@ label {
 .bold {
   font-weight: bold;
 }
+.result-pill {
+  padding-left: 20%;
+  padding-right: 20%;
+}

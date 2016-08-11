@@ -85,6 +85,7 @@ var reportResults = function(result, timeAtStation) {
       You will arrive at this station at ${then.format("h:mm a")}. You will not make it.`);
     row.addClass("too-late");
   }
+  $(theResult).addClass("result-pill");
   $(row).append(theResult);
 };
 
